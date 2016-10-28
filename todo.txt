@@ -1,69 +1,66 @@
 //Completed
-
+    + Set up Song class
+    + Query songs
+    + Populate ListView
+    + SongAdapter
 //end-completed
 
 
 
 Next Commit:
-    + Set up Song class
-    + Query songs
-    + Populate ListView
-    + SongAdapter
 
 
 
 
 Current Task:
+    - Now Playing view 
+    - Set up service (which will do the actual playing)
+
     
 
 
 Bugs:
-    * Songs, albums empty, only loads when Artists is opened
-    * Alumbs doesn't load at all
+    - Ocassional inflate fail (reloaded on when scrolling viewpager)
 
 
 
 
 
 Future Tasks:
+    - Query and save albums artwork
+        - Set songs artwork
+    - Set up Fragments:
+        - Songs
+            - ListView item:
+                - Artwork
+                - Song name
+                - Artist Name
+            - LongClick for contextual action mode (CheckBox)
+                - Menu:
+                    - Add to playlist
+                    - Settings
+        - Albums
+            - GridView
+                - Artwork
+                - Album name
+                - Artist
+            - Single Album:
+                - 1/3 Screen with art, name, artist, year, total duration
+                - ListView Tracks (trackNum, TrackName, duration)
+        - Artists:
+            - ListView Item:
+                - first album artwork, artistName, numTracks 
+            - Single Artist:
+                - Title=ArtistName
+                - Expandable ListView Item:
+                    - Album(art, year)
+                        - ontouch to expand/collapse
+                        - tracks ListView
+        - Playlists
     - SongAdapter:
         - Need to grab images (leave artwork for now)
-    - Set up artists fragment
-    - Set up albums fragment
     - Asset drop:
         - Drop icons for: notification, shuffle
-
-
-
-Plan:
-    * Browser Tabs:
-        * Songs
-            * ListView item:
-                * Artwork
-                * Song name
-                * Artist Name
-            * LongClick for contextual action mode (CheckBox)
-                * Menu:
-                    * Add to playlist
-                    * Settings
-        * Albums
-            * GridView
-                * Artwork
-                * Album name
-                * Artist
-            * Single Album:
-                * 1/3 Screen with art, name, artist, year, total duration
-                * ListView Tracks (trackNum, TrackName, duration)
-        * Artists:
-            * ListView Item:
-                * first album artwork, artistName, numTracks 
-            * Single Artist:
-                * Title=ArtistName
-                * Expandable ListView Item:
-                    * Album(art, year)
-                        * ontouch to expand/collapse
-                        * tracks ListView
-        * Playlists
     * Contextual Action Menu
         * Add to playlist
     * Now Playing Bottom Bar
@@ -84,7 +81,9 @@ Plan:
             * Current time, total-current time 
             * Shuffle
             * Prev, Play/pause, Next
-    * Scroll Bar (Alphabetical)
+    * Alphabetical Scroll Bar
+
+
 
 Possible Features:
     * Full Access widget on Lock Screen

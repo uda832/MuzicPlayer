@@ -7,6 +7,8 @@
 ARG_SECTION_NAME	MainActivity.java	/^        private static final String ARG_SECTION_NAME = "section_name";$/;"	f	class:MainActivity.TabFragment	file:
 Album	Album.java	/^public class Album$/;"	c
 MainActivity	MainActivity.java	/^public class MainActivity extends AppCompatActivity$/;"	c
+MusicBinder	MusicService.java	/^    public class MusicBinder extends Binder$/;"	c	class:MusicService
+MusicService	MusicService.java	/^public class MusicService extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnCompletionListener$/;"	c
 PERMISSIONS_EXTERNAL	MainActivity.java	/^    private static final int PERMISSIONS_EXTERNAL = 0;$/;"	f	class:MainActivity	file:
 SectionsPagerAdapter	MainActivity.java	/^        public SectionsPagerAdapter(FragmentManager fm) {$/;"	m	class:MainActivity.SectionsPagerAdapter
 SectionsPagerAdapter	MainActivity.java	/^    public class SectionsPagerAdapter extends FragmentPagerAdapter { $/;"	c	class:MainActivity
@@ -19,8 +21,10 @@ SongsAdapter	SongsAdapter.java	/^    public SongsAdapter(Context context, ArrayL
 SongsAdapter	SongsAdapter.java	/^public class SongsAdapter extends ArrayAdapter<Song>$/;"	c
 TabFragment	MainActivity.java	/^        public TabFragment() {$/;"	m	class:MainActivity.TabFragment
 TabFragment	MainActivity.java	/^    public static class TabFragment extends Fragment {$/;"	c	class:MainActivity
+bindFlag	MainActivity.java	/^    private boolean bindFlag;$/;"	f	class:MainActivity	file:
 com.example.ud4.muzicplayer	Album.java	/^package com.example.ud4.muzicplayer;$/;"	p
 com.example.ud4.muzicplayer	MainActivity.java	/^package com.example.ud4.muzicplayer;$/;"	p
+com.example.ud4.muzicplayer	MusicService.java	/^package com.example.ud4.muzicplayer;$/;"	p
 com.example.ud4.muzicplayer	Song.java	/^package com.example.ud4.muzicplayer;$/;"	p
 com.example.ud4.muzicplayer	SongAdapter.java	/^package com.example.ud4.muzicplayer;$/;"	p
 com.example.ud4.muzicplayer	SongsAdapter.java	/^package com.example.ud4.muzicplayer;$/;"	p
@@ -34,11 +38,13 @@ getId	Song.java	/^    public long getId()$/;"	m	class:Song
 getItem	MainActivity.java	/^        public Fragment getItem(int position) {$/;"	m	class:MainActivity.SectionsPagerAdapter
 getPageTitle	MainActivity.java	/^        public CharSequence getPageTitle(int position) {$/;"	m	class:MainActivity.SectionsPagerAdapter
 getPermission	MainActivity.java	/^    public void getPermission()$/;"	m	class:MainActivity
+getService	MusicService.java	/^        MusicService getService()$/;"	m	class:MusicService.MusicBinder
 getSongsList	MainActivity.java	/^    public ArrayList<Song> getSongsList()$/;"	m	class:MainActivity
 getTitle	Album.java	/^    public String getTitle()$/;"	m	class:Album
 getTitle	Song.java	/^    public String getTitle()$/;"	m	class:Song
 getView	SongAdapter.java	/^    public View getView(int position, View view, ViewGroup parent)$/;"	m	class:SongsAdapter
 getView	SongsAdapter.java	/^    public View getView(int position, View view, ViewGroup parent)$/;"	m	class:SongsAdapter
+initPlayer	MusicService.java	/^    public void initPlayer()$/;"	m	class:MusicService
 mAlbum	Album.java	/^    private String mAlbum;$/;"	f	class:Album	file:
 mAlbum	Song.java	/^    private String mAlbum;$/;"	f	class:Song	file:
 mArtist	Album.java	/^    private String mArtist;$/;"	f	class:Album	file:
@@ -49,12 +55,31 @@ mSectionsPagerAdapter	MainActivity.java	/^    private SectionsPagerAdapter mSect
 mTitle	Album.java	/^    private String mTitle;$/;"	f	class:Album	file:
 mTitle	Song.java	/^    private String mTitle;$/;"	f	class:Song	file:
 mViewPager	MainActivity.java	/^    private ViewPager mViewPager;$/;"	f	class:MainActivity	file:
-newInstance	MainActivity.java	/^        public static TabFragment newInstance(String sectionName) {$/;"	m	class:MainActivity.TabFragment
+musicBind	MusicService.java	/^    private final IBinder musicBind = new MusicBinder();$/;"	f	class:MusicService	file:
+musicConnection	MainActivity.java	/^    private ServiceConnection musicConnection = new ServiceConnection()$/;"	f	class:MainActivity	file:
+musicService	MainActivity.java	/^    private MusicService musicService;$/;"	f	class:MainActivity	file:
+newInstance	MainActivity.java	/^        public static TabFragment newInstance(String sectionName) $/;"	m	class:MainActivity.TabFragment
 onAttach	MainActivity.java	/^        public void onAttach(Context context)$/;"	m	class:MainActivity.TabFragment
+onBind	MusicService.java	/^    public IBinder onBind(Intent arg0)$/;"	m	class:MusicService
+onCompletion	MusicService.java	/^	public void onCompletion(MediaPlayer mp)$/;"	m	class:MusicService
 onCreate	MainActivity.java	/^    protected void onCreate(Bundle savedInstanceState) {$/;"	m	class:MainActivity
+onCreate	MusicService.java	/^    public void onCreate()$/;"	m	class:MusicService
 onCreateOptionsMenu	MainActivity.java	/^    public boolean onCreateOptionsMenu(Menu menu) {$/;"	m	class:MainActivity
 onCreateView	MainActivity.java	/^        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)$/;"	m	class:MainActivity.TabFragment
+onDestroy	MainActivity.java	/^    protected void onDestroy()$/;"	m	class:MainActivity
+onError	MusicService.java	/^	public boolean onError(MediaPlayer mp, int what, int extra)$/;"	m	class:MusicService
 onOptionsItemSelected	MainActivity.java	/^    public boolean onOptionsItemSelected(MenuItem item) {$/;"	m	class:MainActivity
+onPrepared	MusicService.java	/^    public void onPrepared(MediaPlayer mp)$/;"	m	class:MusicService
 onRequestPermissionsResult	MainActivity.java	/^    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults)$/;"	m	class:MainActivity
+onStart	MainActivity.java	/^    protected void onStart()$/;"	m	class:MainActivity
+onUnbind	MusicService.java	/^    public boolean onUnbind(Intent arg0)$/;"	m	class:MusicService
+playIntent	MainActivity.java	/^    private Intent playIntent;$/;"	f	class:MainActivity	file:
+playSong	MusicService.java	/^    public void playSong()$/;"	m	class:MusicService
+player	MusicService.java	/^    private MediaPlayer player;$/;"	f	class:MusicService	file:
 populateSongsList	MainActivity.java	/^    public void populateSongsList()$/;"	m	class:MainActivity
+setList	MusicService.java	/^    public void setList(ArrayList<Song> theSongs)$/;"	m	class:MusicService
+setSong	MusicService.java	/^    public void setSong(int songIndex)$/;"	m	class:MusicService
+songOnClick	MainActivity.java	/^    public void songOnClick(View view)$/;"	m	class:MainActivity
+songPos	MusicService.java	/^    private int songPos;$/;"	f	class:MusicService	file:
+songs	MusicService.java	/^    private ArrayList<Song> songs;$/;"	f	class:MusicService	file:
 songsList	MainActivity.java	/^    private ArrayList<Song> songsList;$/;"	f	class:MainActivity	file:

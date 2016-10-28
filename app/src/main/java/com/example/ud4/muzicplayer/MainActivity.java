@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.content.ContextCompat;
 import android.Manifest;
+import com.example.ud4.muzicplayer.MusicService.MusicBinder;
 
 import android.os.Bundle;
 import android.content.Context;
@@ -25,6 +26,11 @@ import android.widget.TextView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+
+import android.os.IBinder;
+import android.content.ComponentName;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -42,6 +48,9 @@ public class MainActivity extends AppCompatActivity
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ArrayList<Song> songsList;
 
+    private MusicService musicService;
+    private Intent playIntent;
+    private boolean bindFlag;
 
 
     /** OnCreate  */
@@ -71,6 +80,56 @@ public class MainActivity extends AppCompatActivity
          
 
     }//end-onCreate
+
+    /** OnStart  */
+    //*******************************************************
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
+        if(playIntent==null)
+        {
+            playIntent = new Intent(this, MusicService.class);
+            bindService(playIntent, musicConnection, Context.BIND_AUTO_CREATE);
+            startService(playIntent);
+        }
+    }
+
+    /** OnDestroy  */
+    //*******************************************************
+    @Override
+    protected void onDestroy()
+    {
+        stopService(playIntent);
+        musicService = null;
+        super.onDestroy();
+    }
+
+    /** ConnectToService  */
+    //*******************************************************
+    private ServiceConnection musicConnection = new ServiceConnection()
+    {
+        /** OnConnect  */
+        //*****************************
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service)
+        {
+            MusicBinder binder = (MusicBinder)service;
+            //get service
+            musicService = binder.getService();
+            //pass list
+            musicService.setList(songsList);
+            bindFlag = true;
+        }
+        
+        /** OnDisconnect  */
+        //*****************************
+        @Override
+        public void onServiceDisconnected(ComponentName name)
+        {
+            bindFlag = false;
+        }
+    };
 
     /** CreateOptionsMenu  */
     //*******************************************************
@@ -154,7 +213,8 @@ public class MainActivity extends AppCompatActivity
          * Returns a new instance of this fragment for the given section
          * number.
          */
-        public static TabFragment newInstance(String sectionName) {
+        public static TabFragment newInstance(String sectionName) 
+        {
             TabFragment fragment = new TabFragment();
             Bundle args = new Bundle();
             args.putString(ARG_SECTION_NAME, sectionName);
@@ -165,12 +225,43 @@ public class MainActivity extends AppCompatActivity
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            ListView listView = (ListView) rootView.findViewById(R.id.item_list);
             String sectionName = getArguments().getString(ARG_SECTION_NAME);
+            View rootView = inflater.inflate(R.layout.fragment_list, container, false);
 
-            SongsAdapter songsAdapter = new SongsAdapter(getActivity(), ((MainActivity) getActivity()).getSongsList());
-            listView.setAdapter(songsAdapter);
+            switch(sectionName)
+            {
+                //Songs
+                case "songs":
+                {
+                    //Grab songsView
+                    ListView listView = (ListView) rootView.findViewById(R.id.item_list);
+                    //Set Adapter
+                    SongsAdapter songsAdapter = new SongsAdapter(getActivity(), ((MainActivity) getActivity()).getSongsList());
+                    listView.setAdapter(songsAdapter);
+                    songsAdapter.notifyDataSetChanged();
+                    break;
+                }
+
+                //Albums
+                case "albums":
+                {
+                    rootView = inflater.inflate(R.layout.fragment_grid, container, false);
+                    break;
+                }
+                
+                //Artists
+                case "artists":
+                {
+                    rootView = inflater.inflate(R.layout.fragment_list, container, false);
+                    break;
+                }
+
+                //Playlists
+                case "playlists":
+                {
+                    break;
+                }
+            }
 
             return rootView;
         }
@@ -193,7 +284,7 @@ public class MainActivity extends AppCompatActivity
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 3;
+            return 4;
         }
 
         @Override
@@ -205,6 +296,8 @@ public class MainActivity extends AppCompatActivity
                     return "albums";
                 case 2:
                     return "artists";
+                case 3:
+                    return "playlists";
             }
             return null;
         }
@@ -214,8 +307,6 @@ public class MainActivity extends AppCompatActivity
     //*******************************************************
     public void populateSongsList()
     {
-        Toast.makeText(getApplicationContext(), "Populate called", Toast.LENGTH_SHORT).show();   
-
         ContentResolver musicResolver = getContentResolver();
         Uri musicUri = android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
         Cursor musicCursor = musicResolver.query(musicUri, null, null, null, null);
@@ -255,4 +346,15 @@ public class MainActivity extends AppCompatActivity
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSIONS_EXTERNAL);
         }
     }
+
+    /** SongOnClick */
+    //*******************************************************
+    public void songOnClick(View view)
+    {
+        musicService.setSong(Integer.parseInt(view.getTag().toString()));
+        musicService.playSong();
+    }
+
+
+
 }//end-class
