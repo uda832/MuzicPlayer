@@ -3,18 +3,23 @@
     + Query songs
     + Populate ListView
     + SongAdapter
+    + Set up service (which will do the actual playing)
+
 //end-completed
 
 
 
 Next Commit:
-
-
+    + Notification && Jump to app from notif 
+    + NOISY handler
+    + Asset drop 
+    + Bugfix: polish controller
 
 
 Current Task:
-    - Now Playing view 
-    - Set up service (which will do the actual playing)
+
+
+
 
     
 

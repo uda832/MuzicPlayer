@@ -14,8 +14,6 @@ import android.support.v4.content.ContextCompat;
 import android.Manifest;
 import com.example.ud4.muzicplayer.MusicService.MusicBinder;
 
-import android.os.Bundle;
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,34 +21,45 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.TextView;
-import android.widget.ListView;
 import android.widget.Toast;
+import android.widget.ListView;
+import android.widget.MediaController.MediaPlayerControl;
 
-
+import android.os.Bundle;
 import android.os.IBinder;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.BroadcastReceiver;
 import android.content.ServiceConnection;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import android.media.AudioManager;
 import android.net.Uri;
+import android.content.Context;
 import android.content.ContentResolver;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 
-
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends AppCompatActivity implements MediaPlayerControl
 {
     private static final int PERMISSIONS_EXTERNAL = 0;
     private ViewPager mViewPager;
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ArrayList<Song> songsList;
 
+    private MusicController controller;
     private MusicService musicService;
     private Intent playIntent;
     private boolean bindFlag;
+
+    private boolean paused = false;
+    private boolean playbackPaused = false;
+    private NoisyAudioStreamReceiver noisyReceiver;
+    
+
 
 
     /** OnCreate  */
@@ -60,25 +69,26 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        songsList = new ArrayList<Song>();
+
         //Get Permission to access EXTERNAL STORAGE
         getPermission();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
+
+        //Adapter for each Fragment
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-        // Set up the ViewPager with the sections adapter.
+        //Hook ViewPager with the adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
-       
-        songsList = new ArrayList<Song>();
-         
-
+      
+        setController();
+        noisyReceiver = new NoisyAudioStreamReceiver();
     }//end-onCreate
 
     /** OnStart  */
@@ -95,15 +105,112 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    /** OnStop  */
+    //*******************************************************
+    @Override
+    protected void onStop()
+    {
+        controller.hide();
+        unregisterReceiver(noisyReceiver);
+        super.onStop();
+    }
+
     /** OnDestroy  */
     //*******************************************************
     @Override
     protected void onDestroy()
     {
         stopService(playIntent);
+        unbindService(musicConnection);
         musicService = null;
         super.onDestroy();
     }
+
+    /** OnResume  */
+    //*******************************************************
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        if (paused)
+        {
+            setController();
+            paused = false;
+        }
+
+		if(musicService!=null && bindFlag)
+            controller.show(0);
+        //Handle NOISY events
+        IntentFilter noiseFilter = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
+        registerReceiver(noisyReceiver, noiseFilter);
+    }
+
+    /** OnPause  */
+    //*******************************************************
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        paused = true;
+    }
+    
+    /** MediaPlayerControl Methods  */
+    //*******************************************************
+    @Override
+	public boolean canPause() { return true; }
+
+	@Override
+	public boolean canSeekBackward() {return true;}
+
+	@Override
+	public boolean canSeekForward() {return true;}
+
+    @Override
+	public int getAudioSessionId() { return 0; }
+
+	@Override
+	public int getBufferPercentage() { return 0; }
+
+	@Override
+	public int getCurrentPosition()
+    {
+		if(musicService!=null && bindFlag && musicService.isPlaying())
+			return musicService.getPos();
+		else 
+		    return 0;
+	}
+
+	@Override
+	public int getDuration()
+	{
+		if(musicService!=null && bindFlag && musicService.isPlaying())
+			return musicService.getDur();
+		else 
+		    return 0;
+	}
+
+	@Override
+	public boolean isPlaying() {
+		if(musicService!=null && bindFlag)
+			return musicService.isPlaying();
+		return false;
+	}
+
+	@Override
+	public void pause() {
+		playbackPaused=true;
+		musicService.pausePlayer();
+	}
+
+	@Override
+	public void seekTo(int pos) {
+		musicService.seek(pos);
+	}
+
+	@Override
+	public void start() {
+		musicService.go();
+	}
 
     /** ConnectToService  */
     //*******************************************************
@@ -114,7 +221,7 @@ public class MainActivity extends AppCompatActivity
         @Override
         public void onServiceConnected(ComponentName name, IBinder service)
         {
-            MusicBinder binder = (MusicBinder)service;
+            MusicBinder binder = (MusicBinder) service;
             //get service
             musicService = binder.getService();
             //pass list
@@ -191,13 +298,14 @@ public class MainActivity extends AppCompatActivity
         }
     }//end-permission
 
-    /** TabFragment.  */
+
+
+
+    /** TabFragment Class.  */
     //*******************************************************
     public static class TabFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
+
+        //Identifier for each section
         private static final String ARG_SECTION_NAME = "section_name";
 
         public TabFragment() {
@@ -209,10 +317,7 @@ public class MainActivity extends AppCompatActivity
             super.onAttach(context);
         }
 
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
+        //Create a fragment with given section/tab name
         public static TabFragment newInstance(String sectionName) 
         {
             TabFragment fragment = new TabFragment();
@@ -222,6 +327,8 @@ public class MainActivity extends AppCompatActivity
             return fragment;
         }
 
+        /** OnCreateView   */
+        //**********************************
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
@@ -267,7 +374,7 @@ public class MainActivity extends AppCompatActivity
         }
     }//end-fragmentClass
 
-    /** SectionsPagerAdapter */
+    /** SectionsPagerAdapter Class */
     //*******************************************************
     public class SectionsPagerAdapter extends FragmentPagerAdapter { 
         public SectionsPagerAdapter(FragmentManager fm) {
@@ -303,6 +410,22 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    /** NoisyAudio Class */
+    //*******************************************************
+    private class NoisyAudioStreamReceiver extends BroadcastReceiver
+    {
+        //Handle NOISY actions (i.e. headphone getting unplugged during playback etc.)
+        @Override
+        public void onReceive(Context context, Intent intent)
+        {
+            if (AudioManager.ACTION_AUDIO_BECOMING_NOISY.equals(intent.getAction()))
+                pause();
+        }
+    }
+  
+
+
+
     /** PopulateSongsList */
     //*******************************************************
     public void populateSongsList()
@@ -337,6 +460,37 @@ public class MainActivity extends AppCompatActivity
         return songsList;
     }
 
+    /** SetController */
+    //*******************************************************
+    public void setController()
+    {
+        if (controller == null)
+            controller = new MusicController(this);
+
+        controller.setPrevNextListeners(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    playNext();
+                }
+            }, new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    playPrev();
+                }
+
+            });
+        controller.setMediaPlayer(this);
+        controller.setAnchorView(findViewById(R.id.container));
+        controller.setEnabled(true);
+
+		if(musicService!=null && bindFlag)
+            musicService.setController(controller);
+    }
+
     /** GetPermission */
     //*******************************************************
     public void getPermission()
@@ -353,8 +507,41 @@ public class MainActivity extends AppCompatActivity
     {
         musicService.setSong(Integer.parseInt(view.getTag().toString()));
         musicService.playSong();
+        if (playbackPaused)
+        {
+            setController();
+            playbackPaused = false;
+        }
+        controller.show(0);
+    }
+
+    /** PlayNext */
+    //*******************************************************
+    private void playNext()
+    {
+        musicService.playNext();
+        if (playbackPaused)
+        {
+            setController();
+            playbackPaused = false;
+        }
+        controller.show(0);
+    }
+
+    /** PlayPrev */
+    //*******************************************************
+    private void playPrev()
+    {
+        musicService.playPrev();
+        if (playbackPaused)
+        {
+            setController();
+            playbackPaused = false;
+        }
+        controller.show(0);
     }
 
 
-
 }//end-class
+
+

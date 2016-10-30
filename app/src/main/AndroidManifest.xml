@@ -20,6 +20,11 @@
             </intent-filter>
         </activity>
         <service android:name=".MusicService" />
+        <receiver android:name=".MusicIntentReceiver">
+           <intent-filter>
+              <action android:name="android.media.AUDIO_BECOMING_NOISY" />
+           </intent-filter>
+        </receiver>
     </application>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
