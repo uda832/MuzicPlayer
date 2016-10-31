@@ -59,13 +59,18 @@ public class MainActivity extends AppCompatActivity implements MediaPlayerContro
     private boolean playbackPaused = false;
     private NoisyAudioStreamReceiver noisyReceiver;
     
-
+    LinearLayout cbRoot;
+    ImageView cbArtwork;
+    TextView cbTitle;
+    TextView cbArtist;
+    CheckBox cbPlayPauseButton;
 
 
     /** OnCreate  */
     //*******************************************************
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) 
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -87,7 +92,8 @@ public class MainActivity extends AppCompatActivity implements MediaPlayerContro
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
       
-        setController();
+        //setController();
+        initControllerBar();
         noisyReceiver = new NoisyAudioStreamReceiver();
     }//end-onCreate
 
@@ -303,8 +309,8 @@ public class MainActivity extends AppCompatActivity implements MediaPlayerContro
 
     /** TabFragment Class.  */
     //*******************************************************
-    public static class TabFragment extends Fragment {
-
+    public static class TabFragment extends Fragment
+    {
         //Identifier for each section
         private static final String ARG_SECTION_NAME = "section_name";
 
@@ -541,7 +547,49 @@ public class MainActivity extends AppCompatActivity implements MediaPlayerContro
         controller.show(0);
     }
 
+    /** InitContollerBar */
+    //*******************************************************
+    public void initControllerBar()
+    {
+        cbRoot = (LinearLayout) findViewById(R.id.controller_bar);
+        cbArtwork = (ImageView) cb.findViewById(R.id.cb_art);
+        cbTitle = (TextView) cb.findViewById(R.id.cb_title);
+        cbArtist = (TextView) cb.findViewById(R.id.cb_artist);
+        cbPlayPauseButton = (TextView) cb.findViewById(R.id.cb_play_pause);
 
+        //Listener for ControllerBar -- Go to NowPlayingActivity
+        cb.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View view)
+            {
+                // IMPLEMENT ME:
+                // Intent to go to NowPlayingActivity
+                Toast.makeText(getApplicationContext(), "Go To NowPlayingActivity", Toast.LENGTH_SHORT).show();   
+            }
+        });
+
+        //Listener for Play/Pause -- send message to the MediaPlaer
+        playPauseButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() 
+        {
+            @Override
+            public void onCheckedChanged(CompoundButton v, boolean flag) 
+            {
+                CheckBox button = (CheckBox) v;
+                boolean state = button.isChecked();
+                
+                //IsPlaying
+                if (state)
+                    musicService.go();
+                //IsPaused
+                else
+                {
+                    playbackPaused = true;
+                    musicService.pausePlayer();
+                }
+            }
+        });
+
+    }
 }//end-class
 
 

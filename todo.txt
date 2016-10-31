@@ -4,25 +4,61 @@
     + Populate ListView
     + SongAdapter
     + Set up service (which will do the actual playing)
+    + Notification && Jump to app from notif 
+    + NOISY handler
+    + Asset drop 
+    + Bugfix: polish controller
 
 //end-completed
 
 
 
 Next Commit:
-    + Notification && Jump to app from notif 
-    + NOISY handler
-    + Asset drop 
-    + Bugfix: polish controller
+    + Place controller_bar view in main activity
+    + InitControllerBar():
+        + grabviews
+        + create listeners
+            + rootview -- Intent to go to NowPlayingFullscreen activity
+            + play/pause
+    + Asset drop: icons
+
+
 
 
 Current Task:
+    - Controller_bar: (Replace MediaController)
 
+        - On activity resume:
+            - if (isPlaying)
+                call updateControllerBar()
+
+        - UpdateControllerBar():
+            - grab each view (album_art, title, artist, playbutton)
+            - currentSong musicService.getSongPos()
+            - controllerTitleText.setText(currentSong.getTitle)...
+
+        - OnMetaDataChanged (will be called when a song changes etc.)
+            - titleView.setText(new song's name etc)
+        
+    - Now Playing Activity
+        - Action bar Setings menu
+            - Add to Playlist
+            - Settings
+        - LongClick on Image Popup/Context menu
+            - Go to Artist
+            - Go to Album
+        - Controls:
+            - Soundcloud-like waveform to scroll through song
+            - Fav button (auto add to "Fav" playlist)
+            - Current time, total-current time 
+            - Shuffle
+            - Prev, Play/pause, Next
+
+    
 
 
 
     
-
 
 Bugs:
     - Ocassional inflate fail (reloaded on when scrolling viewpager)
@@ -64,28 +100,8 @@ Future Tasks:
         - Playlists
     - SongAdapter:
         - Need to grab images (leave artwork for now)
-    - Asset drop:
-        - Drop icons for: notification, shuffle
     * Contextual Action Menu
         * Add to playlist
-    * Now Playing Bottom Bar
-        * Image
-        * Song name
-        * Artist Name
-        * Prev, Pause, Next
-    * Now Playing Activity
-        * Action bar Setings menu
-            * Add to Playlist
-            * Settings
-        * LongClick on Image Popup/Context menu
-            * Go to Artist
-            * Go to Album
-        * Controls:
-            * Soundcloud-like waveform to scroll through song
-            * Fav button (auto add to "Fav" playlist)
-            * Current time, total-current time 
-            * Shuffle
-            * Prev, Play/pause, Next
     * Alphabetical Scroll Bar
 
 
