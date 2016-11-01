@@ -375,7 +375,10 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback
         public void onReceive(Context context, Intent intent)
         {
             if (AudioManager.ACTION_AUDIO_BECOMING_NOISY.equals(intent.getAction()))
-                pause();
+            {
+                if(musicService!=null && bindFlag)
+                    musicService.pausePlayer();
+            }
         }
     }
   
@@ -549,8 +552,13 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback
     @Override
     public void updateControllerBar()
     {
+        int pos = 0;
+
+        if(musicService!=null && bindFlag)
+            pos = musicService.getSongPos();
+
         //Grab song to display
-        Song toDisplay = songsList.get(musicService.getSongPos());
+        Song toDisplay = songsList.get(pos);
 
         //cbArtwork set correct art;
         cbTitle.setText(toDisplay.getTitle());

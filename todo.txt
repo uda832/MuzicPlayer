@@ -15,17 +15,17 @@
             + rootview -- Intent to go to NowPlayingFullscreen activity
             + play/pause
     + Asset drop: icons
+    + Controller_bar: (Replace MediaController)
+        + UpdateControllerBar():
+            + currentSong = musicService.getSongPos()
+            + update view contents:
+        + Replace setController calls with updateControllerBar calls
 
 //end-completed
 
 
 
 Next Commit:
-    + Controller_bar: (Replace MediaController)
-        + UpdateControllerBar():
-            + currentSong = musicService.getSongPos()
-            + update view contents:
-        + Replace setController calls with updateControllerBar calls
 
 
 
