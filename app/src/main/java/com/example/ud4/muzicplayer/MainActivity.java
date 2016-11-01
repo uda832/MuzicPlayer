@@ -1,5 +1,6 @@
 package com.example.ud4.muzicplayer;
 
+//Import Statements {{{
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -20,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.ImageView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -28,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ListView;
 import android.widget.MediaController.MediaPlayerControl;
+import android.text.TextUtils;
 
 import android.os.Bundle;
 import android.os.IBinder;
@@ -46,6 +49,7 @@ import android.content.Context;
 import android.content.ContentResolver;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+//}}}
 
 public class MainActivity extends AppCompatActivity implements ServiceCallback
 {
@@ -63,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback
     private boolean playbackPaused = false;
     private NoisyAudioStreamReceiver noisyReceiver;
     
-    LinearLayout cbRoot;
+    RelativeLayout cbRoot;
     ImageView cbArtwork;
     TextView cbTitle;
     TextView cbArtist;
@@ -117,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback
             bindService(playIntent, musicConnection, Context.BIND_AUTO_CREATE);
             startService(playIntent);
         }
-    }
+    }//end-onstart
 
     /** OnStop  */
     //*******************************************************
@@ -126,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback
     {
         //controller.hide();
         super.onStop();
-    }
+    }//end
 
     /** OnDestroy  */
     //*******************************************************
@@ -140,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback
         unregisterReceiver(noisyReceiver);
         musicService = null;
         super.onDestroy();
-    }
+    }//end
 
     /** OnResume  */
     //*******************************************************
@@ -154,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback
             updateControllerBar();
             paused = false;
         }
-    }
+    }//end
 
     /** OnPause  */
     //*******************************************************
@@ -163,7 +167,8 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback
     {
         super.onPause();
         paused = true;
-    }
+    }//end
+
     
 
 
@@ -183,7 +188,7 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback
             musicService.setList(songsList);
             bindFlag = true;
             musicService.setCallback(MainActivity.this);
-        }
+        }//end
         
         /** OnDisconnect  */
         //*****************************
@@ -191,8 +196,8 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback
         public void onServiceDisconnected(ComponentName name)
         {
             bindFlag = false;
-        }
-    };
+        }//end
+    };//end
 
     /** CreateOptionsMenu  */
     //*******************************************************
@@ -201,7 +206,7 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
-    }
+    }//end
 
     /** OptionsMenuItemSelected*/
     //*******************************************************
@@ -218,7 +223,7 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback
         }
 
         return super.onOptionsItemSelected(item);
-    }
+    }//end
 
     /** RequestPermissionResult*/
     //*******************************************************
@@ -327,12 +332,13 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback
             }
 
             return rootView;
-        }
+        }//end
     }//end-fragmentClass
 
     /** SectionsPagerAdapter Class */
     //*******************************************************
-    public class SectionsPagerAdapter extends FragmentPagerAdapter { 
+    public class SectionsPagerAdapter extends FragmentPagerAdapter
+    {
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
@@ -364,7 +370,7 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback
             }
             return null;
         }
-    }
+    }//end-PagerAdapter
 
     /** NoisyAudio Class */
     //*******************************************************
@@ -380,7 +386,7 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback
                     musicService.pausePlayer();
             }
         }
-    }
+    }//end
   
 
 
@@ -417,10 +423,10 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback
     public ArrayList<Song> getSongsList()
     {
         return songsList;
-    }
+    }//end
 
-    //[>* SetController <]
-    ///[>******************************************************
+    //SetController 
+    //******************************************************
     //public void setController()
     //{
         //if (controller == null)
@@ -448,7 +454,7 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback
 
 		//if(musicService!=null && bindFlag)
             //musicService.setController(controller);
-    //}
+    //}//end
 
     /** GetPermission */
     //*******************************************************
@@ -458,7 +464,7 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback
         {
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSIONS_EXTERNAL);
         }
-    }
+    }//end-getter
 
     /** SongOnClick */
     //*******************************************************
@@ -473,7 +479,7 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback
             playbackPaused = false;
         }
         //controller.show(0);
-    }
+    }//end
 
     /** PlayNext */
     //*******************************************************
@@ -487,7 +493,7 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback
             playbackPaused = false;
         }
         //controller.show(0);
-    }
+    }//end
 
     /** PlayPrev */
     //*******************************************************
@@ -501,13 +507,13 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback
             playbackPaused = false;
         }
         //controller.show(0);
-    }
+    }//end
 
     /** InitContollerBar */
     //*******************************************************
     public void initControllerBar()
     {
-        cbRoot = (LinearLayout) findViewById(R.id.controller_bar);
+        cbRoot = (RelativeLayout) findViewById(R.id.controller_bar);
         cbArtwork = (ImageView) cbRoot.findViewById(R.id.cb_art);
         cbTitle = (TextView) cbRoot.findViewById(R.id.cb_title);
         cbArtist = (TextView) cbRoot.findViewById(R.id.cb_artist);
@@ -545,7 +551,7 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback
             }
         });
 
-    }
+    }//end
 
     /** UpdateContollerBar */
     //*******************************************************
@@ -559,13 +565,17 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback
 
         //Grab song to display
         Song toDisplay = songsList.get(pos);
+        
+        cbArtist.setText(toDisplay.getArtist());
+        cbPlayPauseButton.setChecked(musicService.isPlaying());
 
         //cbArtwork set correct art;
         cbTitle.setText(toDisplay.getTitle());
-        cbArtist.setText(toDisplay.getArtist());
-        cbPlayPauseButton.setChecked(musicService.isPlaying());
-    }
-
+        cbTitle.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+        cbTitle.setSingleLine(true);
+        cbTitle.setMarqueeRepeatLimit(-1);
+        cbTitle.setSelected(true);
+    }//end-updater
 }//end-class
 
 

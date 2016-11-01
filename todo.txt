@@ -20,6 +20,9 @@
             + currentSong = musicService.getSongPos()
             + update view contents:
         + Replace setController calls with updateControllerBar calls
+    + Bugfix: prevent play button from moving when song title is long
+        + Replace controller_bar's rootview with RelativeLayout
+        + Make songTitle marquee (scroll if too long)
 
 //end-completed
 
@@ -61,9 +64,9 @@ Bugs:
 Future Tasks:
     - Controller_bar Mods:
         - Title/artist scrolls if too long
-        - Play/pause button:
-            - background color
-            - tint color
+        + Play/pause button:
+            + background color
+            + tint color
     - Query and save albums artwork
         - Set songs artwork
     - Set up Fragments:

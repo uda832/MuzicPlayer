@@ -20,7 +20,7 @@ NoisyAudioStreamReceiver	MainActivity.java	/^    private class NoisyAudioStreamR
 PERMISSIONS_EXTERNAL	MainActivity.java	/^    private static final int PERMISSIONS_EXTERNAL = 0;$/;"	f	class:MainActivity	file:
 SHOW_PROGRESS	CustomControllerView.java	/^    private static final int    SHOW_PROGRESS = 2;$/;"	f	class:VideoControllerView	file:
 SectionsPagerAdapter	MainActivity.java	/^        public SectionsPagerAdapter(FragmentManager fm) {$/;"	m	class:MainActivity.SectionsPagerAdapter
-SectionsPagerAdapter	MainActivity.java	/^    public class SectionsPagerAdapter extends FragmentPagerAdapter { $/;"	c	class:MainActivity
+SectionsPagerAdapter	MainActivity.java	/^    public class SectionsPagerAdapter extends FragmentPagerAdapter$/;"	c	class:MainActivity
 ServiceCallback	ServiceCallback.java	/^public interface ServiceCallback$/;"	i
 Song	Album.java	/^    public Song(long id, String title, String artist, String album)$/;"	m	class:Album
 Song	Song.java	/^    public Song(long id, String title, String artist, String album)$/;"	m	class:Song
@@ -43,7 +43,7 @@ canSeekForward	CustomControllerView.java	/^        boolean canSeekForward();$/;"
 cbArtist	MainActivity.java	/^    TextView cbArtist;$/;"	f	class:MainActivity
 cbArtwork	MainActivity.java	/^    ImageView cbArtwork;$/;"	f	class:MainActivity
 cbPlayPauseButton	MainActivity.java	/^    CheckBox cbPlayPauseButton;$/;"	f	class:MainActivity
-cbRoot	MainActivity.java	/^    LinearLayout cbRoot;$/;"	f	class:MainActivity
+cbRoot	MainActivity.java	/^    RelativeLayout cbRoot;$/;"	f	class:MainActivity
 cbTitle	MainActivity.java	/^    TextView cbTitle;$/;"	f	class:MainActivity
 com.example.ud4.muzicplayer	Album.java	/^package com.example.ud4.muzicplayer;$/;"	p
 com.example.ud4.muzicplayer	CustomControllerView.java	/^package com.example.ud4.muzicplayer;$/;"	p
