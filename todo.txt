@@ -8,12 +8,6 @@
     + NOISY handler
     + Asset drop 
     + Bugfix: polish controller
-
-//end-completed
-
-
-
-Next Commit:
     + Place controller_bar view in main activity
     + InitControllerBar():
         + grabviews
@@ -22,23 +16,22 @@ Next Commit:
             + play/pause
     + Asset drop: icons
 
+//end-completed
+
+
+
+Next Commit:
+    + Controller_bar: (Replace MediaController)
+        + UpdateControllerBar():
+            + currentSong = musicService.getSongPos()
+            + update view contents:
+        + Replace setController calls with updateControllerBar calls
+
 
 
 
 Current Task:
-    - Controller_bar: (Replace MediaController)
 
-        - On activity resume:
-            - if (isPlaying)
-                call updateControllerBar()
-
-        - UpdateControllerBar():
-            - grab each view (album_art, title, artist, playbutton)
-            - currentSong musicService.getSongPos()
-            - controllerTitleText.setText(currentSong.getTitle)...
-
-        - OnMetaDataChanged (will be called when a song changes etc.)
-            - titleView.setText(new song's name etc)
         
     - Now Playing Activity
         - Action bar Setings menu
@@ -56,8 +49,6 @@ Current Task:
 
     
 
-
-
     
 
 Bugs:
@@ -68,14 +59,19 @@ Bugs:
 
 
 Future Tasks:
+    - Controller_bar Mods:
+        - Title/artist scrolls if too long
+        - Play/pause button:
+            - background color
+            - tint color
     - Query and save albums artwork
         - Set songs artwork
     - Set up Fragments:
         - Songs
-            - ListView item:
-                - Artwork
-                - Song name
-                - Artist Name
+            + ListView item:
+                + Artwork
+                + Song name
+                + Artist Name
             - LongClick for contextual action mode (CheckBox)
                 - Menu:
                     - Add to playlist

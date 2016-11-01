@@ -19,6 +19,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ImageView;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,14 +47,14 @@ import android.content.ContentResolver;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 
-public class MainActivity extends AppCompatActivity implements MediaPlayerControl
+public class MainActivity extends AppCompatActivity implements ServiceCallback
 {
     private static final int PERMISSIONS_EXTERNAL = 0;
     private ViewPager mViewPager;
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ArrayList<Song> songsList;
 
-    private MusicController controller;
+    //private MusicController controller;
     private MusicService musicService;
     private Intent playIntent;
     private boolean bindFlag;
@@ -94,7 +98,11 @@ public class MainActivity extends AppCompatActivity implements MediaPlayerContro
       
         //setController();
         initControllerBar();
+
+        //Handle NOISY events
         noisyReceiver = new NoisyAudioStreamReceiver();
+        IntentFilter noiseFilter = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
+        registerReceiver(noisyReceiver, noiseFilter);
     }//end-onCreate
 
     /** OnStart  */
@@ -116,8 +124,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayerContro
     @Override
     protected void onStop()
     {
-        controller.hide();
-        unregisterReceiver(noisyReceiver);
+        //controller.hide();
         super.onStop();
     }
 
@@ -126,8 +133,11 @@ public class MainActivity extends AppCompatActivity implements MediaPlayerContro
     @Override
     protected void onDestroy()
     {
+        musicService.setCallback(null);     //Unregister
         stopService(playIntent);
         unbindService(musicConnection);
+
+        unregisterReceiver(noisyReceiver);
         musicService = null;
         super.onDestroy();
     }
@@ -140,15 +150,10 @@ public class MainActivity extends AppCompatActivity implements MediaPlayerContro
         super.onResume();
         if (paused)
         {
-            setController();
+            //setController();
+            updateControllerBar();
             paused = false;
         }
-
-		if(musicService!=null && bindFlag)
-            controller.show(0);
-        //Handle NOISY events
-        IntentFilter noiseFilter = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
-        registerReceiver(noisyReceiver, noiseFilter);
     }
 
     /** OnPause  */
@@ -160,63 +165,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayerContro
         paused = true;
     }
     
-    /** MediaPlayerControl Methods  */
-    //*******************************************************
-    @Override
-	public boolean canPause() { return true; }
 
-	@Override
-	public boolean canSeekBackward() {return true;}
-
-	@Override
-	public boolean canSeekForward() {return true;}
-
-    @Override
-	public int getAudioSessionId() { return 0; }
-
-	@Override
-	public int getBufferPercentage() { return 0; }
-
-	@Override
-	public int getCurrentPosition()
-    {
-		if(musicService!=null && bindFlag && musicService.isPlaying())
-			return musicService.getPos();
-		else 
-		    return 0;
-	}
-
-	@Override
-	public int getDuration()
-	{
-		if(musicService!=null && bindFlag && musicService.isPlaying())
-			return musicService.getDur();
-		else 
-		    return 0;
-	}
-
-	@Override
-	public boolean isPlaying() {
-		if(musicService!=null && bindFlag)
-			return musicService.isPlaying();
-		return false;
-	}
-
-	@Override
-	public void pause() {
-		playbackPaused=true;
-		musicService.pausePlayer();
-	}
-
-	@Override
-	public void seekTo(int pos) {
-		musicService.seek(pos);
-	}
-
-	@Override
-	public void start() {
-		musicService.go();
-	}
 
     /** ConnectToService  */
     //*******************************************************
@@ -233,6 +182,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayerContro
             //pass list
             musicService.setList(songsList);
             bindFlag = true;
+            musicService.setCallback(MainActivity.this);
         }
         
         /** OnDisconnect  */
@@ -466,36 +416,36 @@ public class MainActivity extends AppCompatActivity implements MediaPlayerContro
         return songsList;
     }
 
-    /** SetController */
-    //*******************************************************
-    public void setController()
-    {
-        if (controller == null)
-            controller = new MusicController(this);
+    //[>* SetController <]
+    ///[>******************************************************
+    //public void setController()
+    //{
+        //if (controller == null)
+            //controller = new MusicController(this);
 
-        controller.setPrevNextListeners(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View v)
-                {
-                    playNext();
-                }
-            }, new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View v)
-                {
-                    playPrev();
-                }
+        //controller.setPrevNextListeners(new View.OnClickListener()
+            //{
+                //@Override
+                //public void onClick(View v)
+                //{
+                    //playNext();
+                //}
+            //}, new View.OnClickListener()
+            //{
+                //@Override
+                //public void onClick(View v)
+                //{
+                    //playPrev();
+                //}
 
-            });
-        controller.setMediaPlayer(this);
-        controller.setAnchorView(findViewById(R.id.container));
-        controller.setEnabled(true);
+            //});
+        //controller.setMediaPlayer(this);
+        //controller.setAnchorView(findViewById(R.id.container));
+        //controller.setEnabled(true);
 
-		if(musicService!=null && bindFlag)
-            musicService.setController(controller);
-    }
+		//if(musicService!=null && bindFlag)
+            //musicService.setController(controller);
+    //}
 
     /** GetPermission */
     //*******************************************************
@@ -515,10 +465,11 @@ public class MainActivity extends AppCompatActivity implements MediaPlayerContro
         musicService.playSong();
         if (playbackPaused)
         {
-            setController();
+            //setController();
+            updateControllerBar();
             playbackPaused = false;
         }
-        controller.show(0);
+        //controller.show(0);
     }
 
     /** PlayNext */
@@ -528,10 +479,11 @@ public class MainActivity extends AppCompatActivity implements MediaPlayerContro
         musicService.playNext();
         if (playbackPaused)
         {
-            setController();
+            //setController();
+            updateControllerBar();
             playbackPaused = false;
         }
-        controller.show(0);
+        //controller.show(0);
     }
 
     /** PlayPrev */
@@ -541,10 +493,11 @@ public class MainActivity extends AppCompatActivity implements MediaPlayerContro
         musicService.playPrev();
         if (playbackPaused)
         {
-            setController();
+            //setController();
+            updateControllerBar();
             playbackPaused = false;
         }
-        controller.show(0);
+        //controller.show(0);
     }
 
     /** InitContollerBar */
@@ -552,13 +505,13 @@ public class MainActivity extends AppCompatActivity implements MediaPlayerContro
     public void initControllerBar()
     {
         cbRoot = (LinearLayout) findViewById(R.id.controller_bar);
-        cbArtwork = (ImageView) cb.findViewById(R.id.cb_art);
-        cbTitle = (TextView) cb.findViewById(R.id.cb_title);
-        cbArtist = (TextView) cb.findViewById(R.id.cb_artist);
-        cbPlayPauseButton = (TextView) cb.findViewById(R.id.cb_play_pause);
+        cbArtwork = (ImageView) cbRoot.findViewById(R.id.cb_art);
+        cbTitle = (TextView) cbRoot.findViewById(R.id.cb_title);
+        cbArtist = (TextView) cbRoot.findViewById(R.id.cb_artist);
+        cbPlayPauseButton = (CheckBox) cbRoot.findViewById(R.id.cb_play_pause);
 
         //Listener for ControllerBar -- Go to NowPlayingActivity
-        cb.setOnClickListener(new View.OnClickListener()
+        cbRoot.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View view)
             {
@@ -569,7 +522,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayerContro
         });
 
         //Listener for Play/Pause -- send message to the MediaPlaer
-        playPauseButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() 
+        cbPlayPauseButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() 
         {
             @Override
             public void onCheckedChanged(CompoundButton v, boolean flag) 
@@ -590,6 +543,21 @@ public class MainActivity extends AppCompatActivity implements MediaPlayerContro
         });
 
     }
+
+    /** UpdateContollerBar */
+    //*******************************************************
+    @Override
+    public void updateControllerBar()
+    {
+        //Grab song to display
+        Song toDisplay = songsList.get(musicService.getSongPos());
+
+        //cbArtwork set correct art;
+        cbTitle.setText(toDisplay.getTitle());
+        cbArtist.setText(toDisplay.getArtist());
+        cbPlayPauseButton.setChecked(musicService.isPlaying());
+    }
+
 }//end-class
 
 

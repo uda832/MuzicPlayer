@@ -27,7 +27,8 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     private int songPos;
     private String songTitle="";
     private static final int NOTIFY_ID=1;
-    private MusicController controller;
+    //private MusicController controller;
+    private ServiceCallback updaterCallback;
 
     /** OnCreate  */
     //*******************************************************
@@ -62,8 +63,6 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
 
             case AudioManager.AUDIOFOCUS_LOSS:
                 // Lost focus for an unbounded amount of time: stop playback and release media player
-                if (player.isPlaying())
-                    player.stop();
                 player.release();
                 player = null;
                 break;
@@ -107,6 +106,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         notIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendInt = PendingIntent.getActivity(this, 0, notIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
+        //Notification
         Notification.Builder builder = new Notification.Builder(this);
         builder.setContentIntent(pendInt)
 		.setSmallIcon(R.drawable.play)
@@ -114,11 +114,14 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
 		.setOngoing(true)
 		.setContentTitle("Playing")
 		.setContentText(songTitle);
-
 		Notification not = builder.build();
 		startForeground(NOTIFY_ID, not);
 
-        controller.show(0);
+        //Update controllerBar
+        if (updaterCallback != null)
+            updaterCallback.updateControllerBar();
+
+        //controller.show(0);
     }
 
     /** OnCompletion  */
@@ -191,6 +194,13 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         songPos = songIndex;
     }
 
+    /** GetSongPos  */
+    //*******************************************************
+    public int getSongPos()
+    {
+        return songPos;
+    }
+
     /** MusicBinder  */
     //*******************************************************
     public class MusicBinder extends Binder
@@ -246,7 +256,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
 
     /** ControlActions   */
     //*******************************************************
-    public int getPos()
+    public int getCurrentPos()
     {
         return player.getCurrentPosition();
     }
@@ -272,13 +282,19 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     }
 
 
-    /** SetController*/
-    //*******************************************************
-    public void setController(MusicController c)
-    {
-        controller = c;
-    }
+    //[>* SetController<]
+    ///[>******************************************************
+    //public void setController(MusicController c)
+    //{
+        //controller = c;
+    //}
 
+    /** SetCallback   */
+    //*******************************************************
+    public void setCallback(ServiceCallback callbacks)
+    {
+        updaterCallback = callbacks;
+    }
 
 
 }

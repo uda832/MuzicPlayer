@@ -39,6 +39,7 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <FrameLayout
+        android:layout_gravity="bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <LinearLayout
@@ -65,12 +66,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
+                    android:textColor="#FFFFFF"
                     />
                 <TextView
                     android:id="@+id/cb_artist"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="10sp"
+                    android:textColor="#FFFFFF"
                     />
             </LinearLayout>
 
