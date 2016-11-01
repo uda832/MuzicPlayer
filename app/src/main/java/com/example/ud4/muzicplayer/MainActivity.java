@@ -50,6 +50,7 @@ import android.content.Context;
 import android.content.ContentResolver;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import com.squareup.picasso.Picasso;
 //end-imports
 
 public class MainActivity extends AppCompatActivity implements ServiceCallback
@@ -108,6 +109,9 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback
         noisyReceiver = new NoisyAudioStreamReceiver();
         IntentFilter noiseFilter = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
         registerReceiver(noisyReceiver, noiseFilter);
+
+
+
     }//end-onCreate
 
     /** OnStart  */
@@ -565,17 +569,26 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback
         //Grab song to display
         Song toDisplay = songsList.get(pos);
         
-        cbArtist.setText(toDisplay.getArtist());
-
-        if(musicService!=null && bindFlag)
-            cbPlayPauseButton.setChecked(musicService.isPlaying());
-
-        //cbArtwork set correct art;
+        //Artwork
+        Uri uri = toDisplay.getAlbumArtUri();
+        Picasso.with(this)
+               .load(uri)
+               .fit()
+               .centerCrop()
+               .into(cbArtwork);
+        //Song Title
         cbTitle.setText(toDisplay.getTitle());
         cbTitle.setEllipsize(TextUtils.TruncateAt.MARQUEE);
         cbTitle.setSingleLine(true);
         cbTitle.setMarqueeRepeatLimit(-1);
         cbTitle.setSelected(true);
+
+        //Artist
+        cbArtist.setText(toDisplay.getArtist());
+
+        //PlayPauseButton
+        if(musicService!=null && bindFlag)
+            cbPlayPauseButton.setChecked(musicService.isPlaying());
     }//end-updater
 }//end-class
 

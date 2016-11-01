@@ -23,12 +23,6 @@
     + Bugfix: prevent play button from moving when song title is long
         + Replace controller_bar's rootview with RelativeLayout
         + Make songTitle marquee (scroll if too long)
-
-//end-completed
-
-
-
-Next Commit:
     + Display albumArt for each song
         + Import PICASSO library
         + Store album id in each song 
@@ -37,16 +31,19 @@ Next Commit:
             - display into imageView using PICASSO
         + Song.getAlbumArt(long albumId)
         + Polish song layout
+    + Artwork on ControllerBar:
+        + Get album artwork for given songId 
+
+//end-completed
+
+
+
+Next Commit:
 
 
 
 
 Current Task:
-
-
-    - ControllerBar:
-        - Get album artwork for given songId 
-        - For now: only display the art for controllerBar
 
 
 

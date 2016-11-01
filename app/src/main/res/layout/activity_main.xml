@@ -50,20 +50,23 @@
 
             <ImageView
                 android:id="@+id/cb_art"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_alignParentLeft="true"
                 />
             <CheckBox
                 android:id="@+id/cb_play_pause"
-                android:scaleX="1.3"
-                android:scaleY="1.3"
-                android:layout_margin="5dp"
+                android:scaleX="1.5"
+                android:scaleY="1.5"
+                android:layout_margin="10dp"
+                android:layout_marginRight="5dp"
                 android:background="@android:color/transparent"
                 android:button="@drawable/play_pause"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
                 />
             <LinearLayout
                 android:layout_width="0dp"
@@ -71,6 +74,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@id/cb_art"
                 android:layout_toLeftOf="@id/cb_play_pause"
+                android:layout_centerVertical="true"
                 android:orientation="vertical">
                 <TextView
                     android:id="@+id/cb_title"
