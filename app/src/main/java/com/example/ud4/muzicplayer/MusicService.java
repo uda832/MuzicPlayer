@@ -43,7 +43,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         audioManager.requestAudioFocus(this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
         
-    }
+    }//end
 
     /** OnAudioFocusChange */
     //*******************************************************
@@ -82,7 +82,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
                     player.setVolume(0.1f, 0.1f);
                 break;
         }
-    }
+    }//end
 
     /** OnDestroy */
     //*******************************************************
@@ -92,7 +92,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         if (player != null) 
             player.release();
         stopForeground(true);
-    }
+    }//end
 
     /** OnPrepared  */
     //*******************************************************
@@ -122,7 +122,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
             updaterCallback.updateControllerBar();
 
         //controller.show(0);
-    }
+    }//end
 
     /** OnCompletion  */
     //*******************************************************
@@ -135,7 +135,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
             mp.reset();
             playNext();
         }
-	}
+	}//end
 
     /** OnError  */
     //*******************************************************
@@ -145,7 +145,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
 		Log.v("MUSIC PLAYER", "Playback Error");
 		mp.reset();
 		return false;
-	}
+	}//end
 
     /** OnBind  */
     //*******************************************************
@@ -153,7 +153,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     public IBinder onBind(Intent arg0)
     {
         return musicBind;
-    }
+    }//end
 
     /** OnUnbind */
     //*******************************************************
@@ -164,7 +164,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         player.release();
 
         return false;
-    }
+    }//end
 
 
 
@@ -185,21 +185,21 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     public void setList(ArrayList<Song> theSongs)
     {
         songs = theSongs;
-    }
+    }//end
 
     /** SetSong  */
     //*******************************************************
     public void setSong(int songIndex)
     {
         songPos = songIndex;
-    }
+    }//end
 
     /** GetSongPos  */
     //*******************************************************
     public int getSongPos()
     {
         return songPos;
-    }
+    }//end
 
     /** MusicBinder  */
     //*******************************************************
@@ -209,7 +209,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         {
             return MusicService.this;
         }
-    }
+    }//end
 
     /** PlaySong   */
     //*******************************************************
@@ -232,7 +232,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         }
         
         player.prepareAsync();
-    }
+    }//end
 
     /** Playnext   */
     //*******************************************************
@@ -242,7 +242,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         if(songPos >= songs.size()) 
             songPos=0;
 		playSong();
-    }
+    }//end
 
     /** PlayPrev   */
     //*******************************************************
@@ -252,7 +252,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         if(songPos < 0)
             songPos = songs.size() - 1;
 		playSong();
-    }
+    }//end
 
     /** ControlActions   */
     //*******************************************************
@@ -280,21 +280,22 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     {
         player.start();
     }
+    //end-ControlActions
 
 
     //[>* SetController<]
-    ///[>******************************************************
+    //******************************************************
     //public void setController(MusicController c)
     //{
         //controller = c;
-    //}
+    //}//end
 
     /** SetCallback   */
     //*******************************************************
     public void setCallback(ServiceCallback callbacks)
     {
         updaterCallback = callbacks;
-    }
+    }//end
 
 
 }

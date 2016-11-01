@@ -23,7 +23,7 @@ SectionsPagerAdapter	MainActivity.java	/^        public SectionsPagerAdapter(Fra
 SectionsPagerAdapter	MainActivity.java	/^    public class SectionsPagerAdapter extends FragmentPagerAdapter$/;"	c	class:MainActivity
 ServiceCallback	ServiceCallback.java	/^public interface ServiceCallback$/;"	i
 Song	Album.java	/^    public Song(long id, String title, String artist, String album)$/;"	m	class:Album
-Song	Song.java	/^    public Song(long id, String title, String artist, String album)$/;"	m	class:Song
+Song	Song.java	/^    public Song(long id, String title, String artist, long albumId)$/;"	m	class:Song
 Song	Song.java	/^public class Song$/;"	c
 SongsAdapter	SongAdapter.java	/^    public SongsAdapter(Context context, ArrayList<Song> list)$/;"	m	class:SongsAdapter
 SongsAdapter	SongAdapter.java	/^public class SongsAdapter extends ArrayAdapter<Song>$/;"	c
@@ -59,7 +59,8 @@ dispatchKeyEvent	CustomControllerView.java	/^    public boolean dispatchKeyEvent
 doPauseResume	CustomControllerView.java	/^    private void doPauseResume() {$/;"	m	class:VideoControllerView	file:
 doToggleFullscreen	CustomControllerView.java	/^    private void doToggleFullscreen() {$/;"	m	class:VideoControllerView	file:
 getAlbum	Album.java	/^    public String getAlbum()$/;"	m	class:Album
-getAlbum	Song.java	/^    public String getAlbum()$/;"	m	class:Song
+getAlbumArtUri	Song.java	/^    public Uri getAlbumArtUri()$/;"	m	class:Song
+getAlbumId	Song.java	/^    public long getAlbumId()$/;"	m	class:Song
 getArtist	Album.java	/^    public String getArtist()$/;"	m	class:Album
 getArtist	Song.java	/^    public String getArtist()$/;"	m	class:Song
 getBufferPercentage	CustomControllerView.java	/^        int     getBufferPercentage();$/;"	m	interface:VideoControllerView.MediaPlayerControl
@@ -93,11 +94,12 @@ isPlaying	CustomControllerView.java	/^        boolean isPlaying();$/;"	m	interfa
 isPlaying	MusicService.java	/^    public boolean isPlaying()$/;"	m	class:MusicService
 isShowing	CustomControllerView.java	/^    public boolean isShowing() {$/;"	m	class:VideoControllerView
 mAlbum	Album.java	/^    private String mAlbum;$/;"	f	class:Album	file:
-mAlbum	Song.java	/^    private String mAlbum;$/;"	f	class:Song	file:
+mAlbumId	Song.java	/^    private long mAlbumId;$/;"	f	class:Song	file:
 mAnchor	CustomControllerView.java	/^    private ViewGroup           mAnchor;$/;"	f	class:VideoControllerView	file:
 mArtist	Album.java	/^    private String mArtist;$/;"	f	class:Album	file:
 mArtist	Song.java	/^    private String mArtist;$/;"	f	class:Song	file:
 mContext	CustomControllerView.java	/^    private Context             mContext;$/;"	f	class:VideoControllerView	file:
+mContext	SongsAdapter.java	/^    private Context mContext;$/;"	f	class:SongsAdapter	file:
 mCurrentTime	CustomControllerView.java	/^    private TextView            mEndTime, mCurrentTime;$/;"	f	class:VideoControllerView	file:
 mDragging	CustomControllerView.java	/^    private boolean             mDragging;$/;"	f	class:VideoControllerView	file:
 mEndTime	CustomControllerView.java	/^    private TextView            mEndTime, mCurrentTime;$/;"	f	class:VideoControllerView	file:

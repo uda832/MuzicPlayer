@@ -29,13 +29,27 @@
 
 
 Next Commit:
+    + Display albumArt for each song
+        + Import PICASSO library
+        + Store album id in each song 
+        + SongAdapter.getView:
+            - grab uri of albumArt using albumId
+            - display into imageView using PICASSO
+        + Song.getAlbumArt(long albumId)
+        + Polish song layout
 
 
 
 
 Current Task:
 
-        
+
+    - ControllerBar:
+        - Get album artwork for given songId 
+        - For now: only display the art for controllerBar
+
+
+
     - Now Playing Activity
         - Action bar Setings menu
             - Add to Playlist
@@ -50,7 +64,7 @@ Current Task:
             - Shuffle
             - Prev, Play/pause, Next
 
-    
+
 
     
 

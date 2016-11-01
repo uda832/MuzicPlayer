@@ -1,6 +1,7 @@
 package com.example.ud4.muzicplayer;
 
-//Import Statements {{{
+//Import Statements
+//****************
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -49,7 +50,7 @@ import android.content.Context;
 import android.content.ContentResolver;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-//}}}
+//end-imports
 
 public class MainActivity extends AppCompatActivity implements ServiceCallback
 {
@@ -171,7 +172,6 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback
 
     
 
-
     /** ConnectToService  */
     //*******************************************************
     private ServiceConnection musicConnection = new ServiceConnection()
@@ -258,7 +258,6 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }//end-permission
-
 
 
 
@@ -390,7 +389,6 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback
   
 
 
-
     /** PopulateSongsList */
     //*******************************************************
     public void populateSongsList()
@@ -405,15 +403,16 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback
             int idColumn = musicCursor.getColumnIndex(android.provider.MediaStore.Audio.Media._ID);
             int titleColumn = musicCursor.getColumnIndex(android.provider.MediaStore.Audio.Media.TITLE);
             int artistColumn = musicCursor.getColumnIndex(android.provider.MediaStore.Audio.Media.ARTIST);
-            int albumColumn = musicCursor.getColumnIndex(android.provider.MediaStore.Audio.Media.ALBUM);
+            int albumIdColumn = musicCursor.getColumnIndex(android.provider.MediaStore.Audio.Media.ALBUM_ID);
 
             //add songs to list
             do {
                 long thisId = musicCursor.getLong(idColumn);
                 String thisTitle = musicCursor.getString(titleColumn);
                 String thisArtist = musicCursor.getString(artistColumn);
-                String thisAlbum = musicCursor.getString(albumColumn);
-                songsList.add(new Song(thisId, thisTitle, thisArtist, thisAlbum));
+                long thisAlbumId = musicCursor.getLong(albumIdColumn);
+
+                songsList.add(new Song(thisId, thisTitle, thisArtist, thisAlbumId));
             } while (musicCursor.moveToNext());
         }
     }//end-populate
@@ -567,7 +566,9 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback
         Song toDisplay = songsList.get(pos);
         
         cbArtist.setText(toDisplay.getArtist());
-        cbPlayPauseButton.setChecked(musicService.isPlaying());
+
+        if(musicService!=null && bindFlag)
+            cbPlayPauseButton.setChecked(musicService.isPlaying());
 
         //cbArtwork set correct art;
         cbTitle.setText(toDisplay.getTitle());
