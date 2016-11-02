@@ -21,6 +21,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ImageView;
@@ -309,6 +310,14 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback
                     //Set Adapter
                     SongsAdapter songsAdapter = new SongsAdapter(getActivity(), ((MainActivity) getActivity()).getSongsList());
                     listView.setAdapter(songsAdapter);
+                    listView.setOnItemClickListener(new ListView.OnItemClickListener()
+                    {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+                        {
+                            ((MainActivity) getActivity()).songOnClick(position);
+                        }
+                    });
                     songsAdapter.notifyDataSetChanged();
                     break;
                 }
@@ -336,6 +345,7 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback
 
             return rootView;
         }//end
+
     }//end-fragmentClass
 
     /** SectionsPagerAdapter Class */
@@ -471,10 +481,11 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback
 
     /** SongOnClick */
     //*******************************************************
-    public void songOnClick(View view)
+    public void songOnClick(int position)
     {
-        musicService.setSong(Integer.parseInt(view.getTag().toString()));
+        musicService.setSong(position);
         musicService.playSong();
+        
         if (playbackPaused)
         {
             //setController();

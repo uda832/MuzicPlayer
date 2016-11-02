@@ -33,17 +33,31 @@
         + Polish song layout
     + Artwork on ControllerBar:
         + Get album artwork for given songId 
+        + Play/pause button:
+            + background color
+            + tint color
 
 //end-completed
 
 
 
 Next Commit:
-
+    + Optimize SongAdapter.getView():
+        + Use holder to reduce findViewById calls
+        + Replace songOnClick with OnItemClickListener since tags can't be used
 
 
 
 Current Task:
+
+TEST:
+    * Scrolling should work
+    * Clicked song should play
+        * Conclusion: using holder worked, replacing onClick funciton with OnItemClickListener worked
+
+    * Monitor memory usage -- see if improved (last time it was 20MB+)
+
+
 
 
 
@@ -61,25 +75,30 @@ Current Task:
             - Shuffle
             - Prev, Play/pause, Next
 
+IDEA:
+    - Optimization: listView alternative to hold songs?
+        - Something that utilizes the memory better
+    - Set background imageView
+        - Dynamically change image using picasso
+
 
 
     
 
 Bugs:
-    - Ocassional inflate fail (reloaded on when scrolling viewpager)
+    - Inflate fail (onCreateView invoked only when viewPager is scrolled)
 
 
+TESTS before deploying:
+    - Analyze memory consumption (compared to other music players)
+        - Look for room to optimize usage
+    - Analyze CPU usage (while visible, in the background)
 
 
 
 Future Tasks:
-    - Controller_bar Mods:
-        - Title/artist scrolls if too long
-        + Play/pause button:
-            + background color
-            + tint color
-    - Query and save albums artwork
-        - Set songs artwork
+    - Use headphone controllers
+        - Defaults (pause/play, double-click to playNext, triple for prev etc.)
     - Set up Fragments:
         - Songs
             + ListView item:

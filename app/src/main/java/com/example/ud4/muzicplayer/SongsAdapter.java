@@ -24,38 +24,45 @@ public class SongsAdapter extends ArrayAdapter<Song>
     @Override
     public View getView(int position, View view, ViewGroup parent)
     {
-        LinearLayout listItemView = (LinearLayout) view;
+        ViewHolder holder;
 
-        // Recycle or Inflate
-        if (listItemView == null) 
+        // Inflate
+        if (view == null) 
         {
-            listItemView = (LinearLayout) LayoutInflater.from(getContext()).inflate(
-                R.layout.song, parent, false);
+            view = (LinearLayout) LayoutInflater.from(getContext()).inflate( R.layout.song, parent, false);
+
+            holder = new ViewHolder();
+            holder.imageView = (ImageView) view.findViewById(R.id.song_image);
+            holder.titleView = (TextView) view.findViewById(R.id.song_title);
+            holder.artistView = (TextView) view.findViewById(R.id.song_artist);
+
+            view.setTag(holder);
         }
+        //Recycle
+        else
+            holder = (ViewHolder) view.getTag();
 
         //Grab data from object
         Song song = getItem(position);
-        String title = song.getTitle();
-        String artist = song.getArtist();
         Uri albumArtUri = song.getAlbumArtUri();
-
-        //Grab Views
-        ImageView imageView = (ImageView) listItemView.findViewById(R.id.song_image);
-        TextView titleView = (TextView) listItemView.findViewById(R.id.song_title);
-        TextView artistView = (TextView) listItemView.findViewById(R.id.song_artist);
-
 
         //Set data as views' contents
         Picasso.with(mContext)
                .load(albumArtUri)
                .fit()
                .centerCrop()
-               .into(imageView);
-        titleView.setText(title);
-        artistView.setText(artist);
-        listItemView.setTag(position);
+               .into(holder.imageView);
+        holder.titleView.setText(song.getTitle());
+        holder.artistView.setText(song.getArtist());
         
-        return listItemView;
+        return view;
+    }
+
+    private static class ViewHolder
+    {
+        public ImageView imageView;
+        public TextView titleView;
+        public TextView artistView;
     }
 
     

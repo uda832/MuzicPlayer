@@ -36,6 +36,8 @@ VideoControllerView	CustomControllerView.java	/^    public VideoControllerView(C
 VideoControllerView	CustomControllerView.java	/^    public VideoControllerView(Context context, AttributeSet attrs) {$/;"	m	class:VideoControllerView
 VideoControllerView	CustomControllerView.java	/^    public VideoControllerView(Context context, boolean useFastForward) {$/;"	m	class:VideoControllerView
 VideoControllerView	CustomControllerView.java	/^public class VideoControllerView extends FrameLayout {$/;"	c
+ViewHolder	SongsAdapter.java	/^    private static class ViewHolder$/;"	c	class:SongsAdapter
+artistView	SongsAdapter.java	/^        public TextView artistView;$/;"	f	class:SongsAdapter.ViewHolder
 bindFlag	MainActivity.java	/^    private boolean bindFlag;$/;"	f	class:MainActivity	file:
 canPause	CustomControllerView.java	/^        boolean canPause();$/;"	m	interface:VideoControllerView.MediaPlayerControl
 canSeekBackward	CustomControllerView.java	/^        boolean canSeekBackward();$/;"	m	interface:VideoControllerView.MediaPlayerControl
@@ -85,6 +87,7 @@ go	MusicService.java	/^    public void go()$/;"	m	class:MusicService
 handleMessage	CustomControllerView.java	/^        public void handleMessage(Message msg) {$/;"	m	class:VideoControllerView.MessageHandler
 hide	CustomControllerView.java	/^    public void hide() {$/;"	m	class:VideoControllerView
 hide	MusicController.java	/^    public void hide()$/;"	m	class:MusicController
+imageView	SongsAdapter.java	/^        public ImageView imageView;$/;"	f	class:SongsAdapter.ViewHolder
 initControllerBar	MainActivity.java	/^    public void initControllerBar()$/;"	m	class:MainActivity
 initControllerView	CustomControllerView.java	/^    private void initControllerView(View v) {$/;"	m	class:VideoControllerView	file:
 initPlayer	MusicService.java	/^    public void initPlayer()$/;"	m	class:MusicService
@@ -189,13 +192,14 @@ setProgress	CustomControllerView.java	/^    private int setProgress() {$/;"	m	cl
 setSong	MusicService.java	/^    public void setSong(int songIndex)$/;"	m	class:MusicService
 show	CustomControllerView.java	/^    public void show() {$/;"	m	class:VideoControllerView
 show	CustomControllerView.java	/^    public void show(int timeout) {$/;"	m	class:VideoControllerView
-songOnClick	MainActivity.java	/^    public void songOnClick(View view)$/;"	m	class:MainActivity
+songOnClick	MainActivity.java	/^    public void songOnClick(int position)$/;"	m	class:MainActivity
 songPos	MusicService.java	/^    private int songPos;$/;"	f	class:MusicService	file:
 songTitle	MusicService.java	/^    private String songTitle="";$/;"	f	class:MusicService	file:
 songs	MusicService.java	/^    private ArrayList<Song> songs;$/;"	f	class:MusicService	file:
 songsList	MainActivity.java	/^    private ArrayList<Song> songsList;$/;"	f	class:MainActivity	file:
 start	CustomControllerView.java	/^        void    start();$/;"	m	interface:VideoControllerView.MediaPlayerControl
 stringForTime	CustomControllerView.java	/^    private String stringForTime(int timeMs) {$/;"	m	class:VideoControllerView	file:
+titleView	SongsAdapter.java	/^        public TextView titleView;$/;"	f	class:SongsAdapter.ViewHolder
 toggleFullScreen	CustomControllerView.java	/^        void    toggleFullScreen();$/;"	m	interface:VideoControllerView.MediaPlayerControl
 updateControllerBar	MainActivity.java	/^    public void updateControllerBar()$/;"	m	class:MainActivity
 updateControllerBar	ServiceCallback.java	/^    void updateControllerBar();$/;"	m	interface:ServiceCallback
