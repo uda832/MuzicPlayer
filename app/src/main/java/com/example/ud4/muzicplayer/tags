@@ -208,7 +208,9 @@ songOnClick	MainActivity.java	/^    public void songOnClick(int position)$/;"	m	
 songPos	MusicService.java	/^    private int songPos;$/;"	f	class:MusicService	file:
 songTitle	MusicService.java	/^    private String songTitle="";$/;"	f	class:MusicService	file:
 songs	MusicService.java	/^    private ArrayList<Song> songs;$/;"	f	class:MusicService	file:
+songsAdapter	MainActivity.java	/^        private SongsAdapter songsAdapter;$/;"	f	class:MainActivity.TabFragment	file:
 songsList	MainActivity.java	/^    private ArrayList<Song> songsList;$/;"	f	class:MainActivity	file:
+sortSongsList	MainActivity.java	/^    public void sortSongsList()$/;"	m	class:MainActivity
 start	CustomControllerView.java	/^        void    start();$/;"	m	interface:VideoControllerView.MediaPlayerControl
 stringForTime	CustomControllerView.java	/^    private String stringForTime(int timeMs) {$/;"	m	class:VideoControllerView	file:
 titleView	SongsAdapter.java	/^        public TextView titleView;$/;"	f	class:SongsAdapter.ViewHolder

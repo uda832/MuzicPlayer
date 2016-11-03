@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
 
         songsList = new ArrayList<Song>();
 
-        //Populates songsList when successfull
+        //Populates songsList -- Request permission if not granted already
         getPermission();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -255,13 +255,7 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
                 {
                     //Granted
                     populateSongsList();
-                    Collections.sort(songsList, new Comparator<Song>()
-                    {
-                        public int compare(Song a, Song b)
-                        {
-                            return a.getTitle().compareTo(b.getTitle());
-                        }
-                    });
+                    sortSongsList();
                 } 
                 else 
                 {
@@ -285,6 +279,7 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
     {
         //Identifier for each section
         private static final String ARG_SECTION_NAME = "section_name";
+        private SongsAdapter songsAdapter;
 
         public TabFragment() {
         }
@@ -293,6 +288,9 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
         public void onAttach(Context context)
         {
             super.onAttach(context);
+
+            if (songsAdapter == null)
+                songsAdapter = new SongsAdapter(getActivity(), ((MainActivity) getActivity()).getSongsList());
         }
 
         //Create a fragment with given section/tab name
@@ -320,8 +318,8 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
                 {
                     //Grab songsView
                     ListView listView = (ListView) rootView.findViewById(R.id.item_list);
+
                     //Set Adapter
-                    SongsAdapter songsAdapter = new SongsAdapter(getActivity(), ((MainActivity) getActivity()).getSongsList());
                     listView.setAdapter(songsAdapter);
                     listView.setOnItemClickListener(new ListView.OnItemClickListener()
                     {
@@ -444,6 +442,19 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
         }
     }//end-populate
 
+    /** SortSongsList */
+    //*******************************************************
+    public void sortSongsList()
+    {
+        Collections.sort(songsList, new Comparator<Song>()
+        {
+            public int compare(Song a, Song b)
+            {
+                return a.getTitle().compareTo(b.getTitle());
+            }
+        });
+    }//end
+
     /** GetSongsList */
     //*******************************************************
     public ArrayList<Song> getSongsList()
@@ -486,9 +497,14 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
     //*******************************************************
     public void getPermission()
     {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
         {
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSIONS_EXTERNAL);
+        }
+        else
+        {
+            populateSongsList();
+            sortSongsList();
         }
     }//end-getter
 
@@ -634,6 +650,7 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
         if(musicService!=null && bindFlag)
             cbPlayPauseButton.setChecked(musicService.isPlaying());
     }//end-updater
+
 
 
     /** CalcBackgroundSize */
