@@ -6,8 +6,10 @@
 !_TAG_PROGRAM_VERSION	5.8	//
 ARG_SECTION_NAME	MainActivity.java	/^        private static final String ARG_SECTION_NAME = "section_name";$/;"	f	class:MainActivity.TabFragment	file:
 Album	Album.java	/^public class Album$/;"	c
+BlurTransformation	BlurTransformation.java	/^    public BlurTransformation(Context context, float radius) {$/;"	m	class:BlurTransformation
+BlurTransformation	BlurTransformation.java	/^public class BlurTransformation implements Transformation {$/;"	c
 FADE_OUT	CustomControllerView.java	/^    private static final int    FADE_OUT = 1;$/;"	f	class:VideoControllerView	file:
-MainActivity	MainActivity.java	/^public class MainActivity extends AppCompatActivity implements ServiceCallback$/;"	c
+MainActivity	MainActivity.java	/^public class MainActivity extends AppCompatActivity implements ServiceCallback, Target$/;"	c
 MediaPlayerControl	CustomControllerView.java	/^    public interface MediaPlayerControl {$/;"	i	class:VideoControllerView
 MessageHandler	CustomControllerView.java	/^        MessageHandler(VideoControllerView view) {$/;"	m	class:VideoControllerView.MessageHandler
 MessageHandler	CustomControllerView.java	/^    private static class MessageHandler extends Handler {$/;"	c	class:VideoControllerView
@@ -38,16 +40,20 @@ VideoControllerView	CustomControllerView.java	/^    public VideoControllerView(C
 VideoControllerView	CustomControllerView.java	/^public class VideoControllerView extends FrameLayout {$/;"	c
 ViewHolder	SongsAdapter.java	/^    private static class ViewHolder$/;"	c	class:SongsAdapter
 artistView	SongsAdapter.java	/^        public TextView artistView;$/;"	f	class:SongsAdapter.ViewHolder
+backgroundSize	MainActivity.java	/^    private Point backgroundSize;$/;"	f	class:MainActivity	file:
 bindFlag	MainActivity.java	/^    private boolean bindFlag;$/;"	f	class:MainActivity	file:
+blurTransformation	MainActivity.java	/^    private BlurTransformation blurTransformation;$/;"	f	class:MainActivity	file:
+calcBackgroundSize	MainActivity.java	/^    private static Point calcBackgroundSize(Display display)$/;"	m	class:MainActivity	file:
 canPause	CustomControllerView.java	/^        boolean canPause();$/;"	m	interface:VideoControllerView.MediaPlayerControl
 canSeekBackward	CustomControllerView.java	/^        boolean canSeekBackward();$/;"	m	interface:VideoControllerView.MediaPlayerControl
 canSeekForward	CustomControllerView.java	/^        boolean canSeekForward();$/;"	m	interface:VideoControllerView.MediaPlayerControl
-cbArtist	MainActivity.java	/^    TextView cbArtist;$/;"	f	class:MainActivity
-cbArtwork	MainActivity.java	/^    ImageView cbArtwork;$/;"	f	class:MainActivity
-cbPlayPauseButton	MainActivity.java	/^    CheckBox cbPlayPauseButton;$/;"	f	class:MainActivity
-cbRoot	MainActivity.java	/^    RelativeLayout cbRoot;$/;"	f	class:MainActivity
-cbTitle	MainActivity.java	/^    TextView cbTitle;$/;"	f	class:MainActivity
+cbArtist	MainActivity.java	/^    private TextView cbArtist;$/;"	f	class:MainActivity	file:
+cbArtwork	MainActivity.java	/^    private ImageView cbArtwork;$/;"	f	class:MainActivity	file:
+cbPlayPauseButton	MainActivity.java	/^    private CheckBox cbPlayPauseButton;$/;"	f	class:MainActivity	file:
+cbRoot	MainActivity.java	/^    private RelativeLayout cbRoot;$/;"	f	class:MainActivity	file:
+cbTitle	MainActivity.java	/^    private TextView cbTitle;$/;"	f	class:MainActivity	file:
 com.example.ud4.muzicplayer	Album.java	/^package com.example.ud4.muzicplayer;$/;"	p
+com.example.ud4.muzicplayer	BlurTransformation.java	/^package com.example.ud4.muzicplayer;$/;"	p
 com.example.ud4.muzicplayer	CustomControllerView.java	/^package com.example.ud4.muzicplayer;$/;"	p
 com.example.ud4.muzicplayer	MainActivity.java	/^package com.example.ud4.muzicplayer;$/;"	p
 com.example.ud4.muzicplayer	MusicController.java	/^package com.example.ud4.muzicplayer;$/;"	p
@@ -56,6 +62,9 @@ com.example.ud4.muzicplayer	ServiceCallback.java	/^package com.example.ud4.muzic
 com.example.ud4.muzicplayer	Song.java	/^package com.example.ud4.muzicplayer;$/;"	p
 com.example.ud4.muzicplayer	SongAdapter.java	/^package com.example.ud4.muzicplayer;$/;"	p
 com.example.ud4.muzicplayer	SongsAdapter.java	/^package com.example.ud4.muzicplayer;$/;"	p
+context	BlurTransformation.java	/^    private Context context;$/;"	f	class:BlurTransformation	file:
+convertBitmap	BlurTransformation.java	/^    private static Bitmap convertBitmap(Bitmap bitmap, Config config) {$/;"	m	class:BlurTransformation	file:
+cropBitmapWidthToMultipleOfFour	BlurTransformation.java	/^    private static Bitmap cropBitmapWidthToMultipleOfFour(Bitmap bitmap) {$/;"	m	class:BlurTransformation	file:
 disableUnsupportedButtons	CustomControllerView.java	/^    private void disableUnsupportedButtons() {$/;"	m	class:VideoControllerView	file:
 dispatchKeyEvent	CustomControllerView.java	/^    public boolean dispatchKeyEvent(KeyEvent event) {$/;"	m	class:VideoControllerView
 doPauseResume	CustomControllerView.java	/^    private void doPauseResume() {$/;"	m	class:VideoControllerView	file:
@@ -96,6 +105,7 @@ isFullScreen	CustomControllerView.java	/^        boolean isFullScreen();$/;"	m	i
 isPlaying	CustomControllerView.java	/^        boolean isPlaying();$/;"	m	interface:VideoControllerView.MediaPlayerControl
 isPlaying	MusicService.java	/^    public boolean isPlaying()$/;"	m	class:MusicService
 isShowing	CustomControllerView.java	/^    public boolean isShowing() {$/;"	m	class:VideoControllerView
+key	BlurTransformation.java	/^    public String key() {$/;"	m	class:BlurTransformation
 mAlbum	Album.java	/^    private String mAlbum;$/;"	f	class:Album	file:
 mAlbumId	Song.java	/^    private long mAlbumId;$/;"	f	class:Song	file:
 mAnchor	CustomControllerView.java	/^    private ViewGroup           mAnchor;$/;"	f	class:VideoControllerView	file:
@@ -145,6 +155,8 @@ noisyReceiver	MainActivity.java	/^    private NoisyAudioStreamReceiver noisyRece
 onAttach	MainActivity.java	/^        public void onAttach(Context context)$/;"	m	class:MainActivity.TabFragment
 onAudioFocusChange	MusicService.java	/^    public void onAudioFocusChange(int focusChange)$/;"	m	class:MusicService
 onBind	MusicService.java	/^    public IBinder onBind(Intent arg0)$/;"	m	class:MusicService
+onBitmapFailed	MainActivity.java	/^    public void onBitmapFailed(Drawable drawable) {$/;"	m	class:MainActivity
+onBitmapLoaded	MainActivity.java	/^    public void onBitmapLoaded(Bitmap bitmap, LoadedFrom from) {$/;"	m	class:MainActivity
 onCompletion	MusicService.java	/^	public void onCompletion(MediaPlayer mp)$/;"	m	class:MusicService
 onCreate	MainActivity.java	/^    protected void onCreate(Bundle savedInstanceState) $/;"	m	class:MainActivity
 onCreate	MusicService.java	/^    public void onCreate()$/;"	m	class:MusicService
@@ -158,6 +170,7 @@ onInitializeAccessibilityEvent	CustomControllerView.java	/^    public void onIni
 onInitializeAccessibilityNodeInfo	CustomControllerView.java	/^    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {$/;"	m	class:VideoControllerView
 onOptionsItemSelected	MainActivity.java	/^    public boolean onOptionsItemSelected(MenuItem item) {$/;"	m	class:MainActivity
 onPause	MainActivity.java	/^    protected void onPause()$/;"	m	class:MainActivity
+onPrepareLoad	MainActivity.java	/^    public void onPrepareLoad(Drawable placeHolderDrawable) {$/;"	m	class:MainActivity
 onPrepared	MusicService.java	/^    public void onPrepared(MediaPlayer mp)$/;"	m	class:MusicService
 onReceive	MainActivity.java	/^        public void onReceive(Context context, Intent intent)$/;"	m	class:MainActivity.NoisyAudioStreamReceiver
 onRequestPermissionsResult	MainActivity.java	/^    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults)$/;"	m	class:MainActivity
@@ -172,13 +185,12 @@ pausePlayer	MusicService.java	/^    public void pausePlayer()$/;"	m	class:MusicS
 paused	MainActivity.java	/^    private boolean paused = false;$/;"	f	class:MainActivity	file:
 playIntent	MainActivity.java	/^    private Intent playIntent;$/;"	f	class:MainActivity	file:
 playNext	MainActivity.java	/^    private void playNext()$/;"	m	class:MainActivity	file:
-playNext	MusicService.java	/^    public void playNext()$/;"	m	class:MusicService
 playPrev	MainActivity.java	/^    private void playPrev()$/;"	m	class:MainActivity	file:
-playPrev	MusicService.java	/^    public void playPrev()$/;"	m	class:MusicService
 playSong	MusicService.java	/^    public void playSong()$/;"	m	class:MusicService
 playbackPaused	MainActivity.java	/^    private boolean playbackPaused = false;$/;"	f	class:MainActivity	file:
 player	MusicService.java	/^    private MediaPlayer player;$/;"	f	class:MusicService	file:
 populateSongsList	MainActivity.java	/^    public void populateSongsList()$/;"	m	class:MainActivity
+radius	BlurTransformation.java	/^    private float radius;$/;"	f	class:BlurTransformation	file:
 sDefaultTimeout	CustomControllerView.java	/^    private static final int    sDefaultTimeout = 3000;$/;"	f	class:VideoControllerView	file:
 seek	MusicService.java	/^    public void seek(int posn)$/;"	m	class:MusicService
 seekTo	CustomControllerView.java	/^        void    seekTo(int pos);$/;"	m	interface:VideoControllerView.MediaPlayerControl
@@ -201,8 +213,9 @@ start	CustomControllerView.java	/^        void    start();$/;"	m	interface:Video
 stringForTime	CustomControllerView.java	/^    private String stringForTime(int timeMs) {$/;"	m	class:VideoControllerView	file:
 titleView	SongsAdapter.java	/^        public TextView titleView;$/;"	f	class:SongsAdapter.ViewHolder
 toggleFullScreen	CustomControllerView.java	/^        void    toggleFullScreen();$/;"	m	interface:VideoControllerView.MediaPlayerControl
-updateControllerBar	MainActivity.java	/^    public void updateControllerBar()$/;"	m	class:MainActivity
-updateControllerBar	ServiceCallback.java	/^    void updateControllerBar();$/;"	m	interface:ServiceCallback
+transform	BlurTransformation.java	/^    public Bitmap transform(Bitmap bitmap) {$/;"	m	class:BlurTransformation
 updateFullScreen	CustomControllerView.java	/^    public void updateFullScreen() {$/;"	m	class:VideoControllerView
 updatePausePlay	CustomControllerView.java	/^    public void updatePausePlay() {$/;"	m	class:VideoControllerView
+updateViews	MainActivity.java	/^    public void updateViews()$/;"	m	class:MainActivity
+updateViews	ServiceCallback.java	/^    void updateViews();$/;"	m	interface:ServiceCallback
 updaterCallback	MusicService.java	/^    private ServiceCallback updaterCallback;$/;"	f	class:MusicService	file:

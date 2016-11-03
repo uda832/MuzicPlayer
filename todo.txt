@@ -36,26 +36,24 @@
         + Play/pause button:
             + background color
             + tint color
+    + Optimize SongAdapter.getView():
+        + Use holder to reduce findViewById calls
+        + Replace songOnClick with OnItemClickListener since tags can't be used
 
 //end-completed
 
 
 
 Next Commit:
-    + Optimize SongAdapter.getView():
-        + Use holder to reduce findViewById calls
-        + Replace songOnClick with OnItemClickListener since tags can't be used
-
-
+    + Set background to current song's artwork
+        + Implement BlurTransformation class
+        + Change updateControllerBar to updateViews
+            + Include Picasso call to modify background
+    + Modify code so that updateViews is called before the song is loaded 
+    + Fix AppBar: disable scroll and make transparent
 
 Current Task:
-
-TEST:
-    * Scrolling should work
-    * Clicked song should play
-        * Conclusion: using holder worked, replacing onClick funciton with OnItemClickListener worked
-
-    * Monitor memory usage -- see if improved (last time it was 20MB+)
+   
 
 
 
@@ -75,17 +73,14 @@ TEST:
             - Shuffle
             - Prev, Play/pause, Next
 
-IDEA:
-    - Optimization: listView alternative to hold songs?
-        - Something that utilizes the memory better
-    - Set background imageView
-        - Dynamically change image using picasso
 
 
 
     
 
 Bugs:
+    - Audio_focus temporary loss (i.e. message) breaks app
+    - Selecting a song while paused doesn't refresh play button
     - Inflate fail (onCreateView invoked only when viewPager is scrolled)
 
 
@@ -97,6 +92,7 @@ TESTS before deploying:
 
 
 Future Tasks:
+    - Animate hide when fragment is scrolled
     - Use headphone controllers
         - Defaults (pause/play, double-click to playNext, triple for prev etc.)
     - Set up Fragments:

@@ -16,6 +16,17 @@ import android.support.v4.content.ContextCompat;
 import android.Manifest;
 import com.example.ud4.muzicplayer.MusicService.MusicBinder;
 
+import android.annotation.TargetApi;
+import android.graphics.Bitmap;
+import android.graphics.Point;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.TransitionDrawable;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Picasso.LoadedFrom;
+import com.squareup.picasso.Target;
+
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -51,10 +62,9 @@ import android.content.Context;
 import android.content.ContentResolver;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import com.squareup.picasso.Picasso;
 //end-imports
 
-public class MainActivity extends AppCompatActivity implements ServiceCallback
+public class MainActivity extends AppCompatActivity implements ServiceCallback, Target
 {
     private static final int PERMISSIONS_EXTERNAL = 0;
     private ViewPager mViewPager;
@@ -70,12 +80,14 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback
     private boolean playbackPaused = false;
     private NoisyAudioStreamReceiver noisyReceiver;
     
-    RelativeLayout cbRoot;
-    ImageView cbArtwork;
-    TextView cbTitle;
-    TextView cbArtist;
-    CheckBox cbPlayPauseButton;
+    private RelativeLayout cbRoot;
+    private ImageView cbArtwork;
+    private TextView cbTitle;
+    private TextView cbArtist;
+    private CheckBox cbPlayPauseButton;
 
+    private BlurTransformation blurTransformation;
+    private Point backgroundSize;
 
     /** OnCreate  */
     //*******************************************************
@@ -87,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback
 
         songsList = new ArrayList<Song>();
 
-        //Get Permission to access EXTERNAL STORAGE
+        //Populates songsList when successfull
         getPermission();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -103,6 +115,9 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
       
+        blurTransformation = new BlurTransformation(this, 25F);
+        backgroundSize = calcBackgroundSize(getWindowManager().getDefaultDisplay());
+
         //setController();
         initControllerBar();
 
@@ -110,9 +125,6 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback
         noisyReceiver = new NoisyAudioStreamReceiver();
         IntentFilter noiseFilter = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
         registerReceiver(noisyReceiver, noiseFilter);
-
-
-
     }//end-onCreate
 
     /** OnStart  */
@@ -158,10 +170,11 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback
     protected void onResume()
     {
         super.onResume();
+        
         if (paused)
         {
             //setController();
-            updateControllerBar();
+            updateViews();
             paused = false;
         }
     }//end
@@ -400,7 +413,7 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback
             }
         }
     }//end
-  
+
 
 
     /** PopulateSongsList */
@@ -484,14 +497,15 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback
     public void songOnClick(int position)
     {
         musicService.setSong(position);
-        musicService.playSong();
-        
+        updateViews();
+        cbPlayPauseButton.setChecked(true);
         if (playbackPaused)
         {
-            //setController();
-            updateControllerBar();
             playbackPaused = false;
         }
+        musicService.playSong();
+
+        
         //controller.show(0);
     }//end
 
@@ -499,13 +513,19 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback
     //*******************************************************
     private void playNext()
     {
-        musicService.playNext();
+        int songPos = musicService.getSongPos() + 1;
+        if(songPos >= songsList.size()) 
+            songPos=0;
+
+        musicService.setSong(songPos);
+        updateViews();
+
         if (playbackPaused)
         {
             //setController();
-            updateControllerBar();
             playbackPaused = false;
         }
+        musicService.playSong();
         //controller.show(0);
     }//end
 
@@ -513,13 +533,18 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback
     //*******************************************************
     private void playPrev()
     {
-        musicService.playPrev();
+        int songPos = musicService.getSongPos() - 1;
+        if(songPos < 0) 
+            songPos = songsList.size() - 1;
+
+        musicService.setSong(songPos);
+        updateViews();
         if (playbackPaused)
         {
             //setController();
-            updateControllerBar();
             playbackPaused = false;
         }
+        musicService.playSong();
         //controller.show(0);
     }//end
 
@@ -567,10 +592,10 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback
 
     }//end
 
-    /** UpdateContollerBar */
+    /** UpdateViews */
     //*******************************************************
     @Override
-    public void updateControllerBar()
+    public void updateViews()
     {
         int pos = 0;
 
@@ -582,6 +607,14 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback
         
         //Artwork
         Uri uri = toDisplay.getAlbumArtUri();
+        //Background
+        Picasso.with(this)
+               .load(uri)
+               .resize(backgroundSize.x, backgroundSize.y).centerCrop()
+               .transform(blurTransformation)
+               .into(this);
+
+        //ControllerBar image
         Picasso.with(this)
                .load(uri)
                .fit()
@@ -601,6 +634,42 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback
         if(musicService!=null && bindFlag)
             cbPlayPauseButton.setChecked(musicService.isPlaying());
     }//end-updater
+
+
+    /** CalcBackgroundSize */
+    //*******************************************************
+    private static Point calcBackgroundSize(Display display)
+    {
+        final Point screenSize = new Point();
+        display.getSize(screenSize);
+
+        int scaledWidth = (int) (((double) 720 * screenSize.x) / screenSize.y);
+        int croppedWidth = Math.min(scaledWidth, 720);
+
+        int scaledHeight = (int) (((double) 720 * screenSize.y) / screenSize.x);
+        int croppedHeight = Math.min(scaledHeight, 720);
+
+        return new Point(croppedWidth, croppedHeight);
+    }//end-background
+    
+    /** TargetInterfaceMethods */
+    //*******************************************************
+    @Override
+    public void onBitmapFailed(Drawable drawable) {
+        getWindow().setBackgroundDrawable(drawable);
+    }
+
+    @Override
+    public void onBitmapLoaded(Bitmap bitmap, LoadedFrom from) {
+        getWindow().setBackgroundDrawable(
+                new BitmapDrawable(getResources(), bitmap));
+    }
+
+    @Override
+    public void onPrepareLoad(Drawable placeHolderDrawable) {
+        // just prepare mentally
+    }
+    //end-TargetMethods
 }//end-class
 
 

@@ -37,7 +37,6 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     {
         super.onCreate();
         songPos = 0;
-        player = new MediaPlayer();
         initPlayer();
 
         AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
@@ -117,9 +116,12 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
 		Notification not = builder.build();
 		startForeground(NOTIFY_ID, not);
 
-        //Update controllerBar
-        if (updaterCallback != null)
-            updaterCallback.updateControllerBar();
+        ////Update controllerBar
+        //if (updaterCallback != null)
+        //{
+            //updaterCallback.updateControllerBar();
+            //updaterCallback.updateBackground();
+        //}
 
         //controller.show(0);
     }//end
@@ -133,7 +135,12 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         if(player.getCurrentPosition() > 0)
         {
             mp.reset();
-            playNext();
+
+            //PlayNext
+            songPos++;
+            if(songPos >= songs.size()) 
+                songPos=0;
+            playSong();
         }
 	}//end
 
@@ -172,6 +179,9 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     //*******************************************************
     public void initPlayer()
     {
+        if (player == null)
+            player = new MediaPlayer();
+
         player.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
         player.setAudioStreamType(AudioManager.STREAM_MUSIC);
 
@@ -234,25 +244,21 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         player.prepareAsync();
     }//end
 
-    /** Playnext   */
-    //*******************************************************
-    public void playNext()
-    {
-        songPos++;
-        if(songPos >= songs.size()) 
-            songPos=0;
-		playSong();
-    }//end
+    //[>* Playnext   <]
+    ///[>******************************************************
+    //public void playNext()
+    //{
+    //}//end
 
-    /** PlayPrev   */
-    //*******************************************************
-    public void playPrev()
-    {
-        songPos--;
-        if(songPos < 0)
-            songPos = songs.size() - 1;
-		playSong();
-    }//end
+    //[>* PlayPrev   <]
+    ///[>******************************************************
+    //public void playPrev()
+    //{
+        //songPos--;
+        //if(songPos < 0)
+            //songPos = songs.size() - 1;
+		//playSong();
+    //}//end
 
     /** ControlActions   */
     //*******************************************************
