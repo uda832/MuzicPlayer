@@ -97,8 +97,8 @@ handleMessage	CustomControllerView.java	/^        public void handleMessage(Mess
 hide	CustomControllerView.java	/^    public void hide() {$/;"	m	class:VideoControllerView
 hide	MusicController.java	/^    public void hide()$/;"	m	class:MusicController
 imageView	SongsAdapter.java	/^        public ImageView imageView;$/;"	f	class:SongsAdapter.ViewHolder
-initControllerBar	MainActivity.java	/^    public void initControllerBar()$/;"	m	class:MainActivity
 initControllerView	CustomControllerView.java	/^    private void initControllerView(View v) {$/;"	m	class:VideoControllerView	file:
+initControllers	MainActivity.java	/^    public void initControllers()$/;"	m	class:MainActivity
 initPlayer	MusicService.java	/^    public void initPlayer()$/;"	m	class:MusicService
 installPrevNextListeners	CustomControllerView.java	/^    private void installPrevNextListeners() {$/;"	m	class:VideoControllerView	file:
 isFullScreen	CustomControllerView.java	/^        boolean isFullScreen();$/;"	m	interface:VideoControllerView.MediaPlayerControl
@@ -152,6 +152,12 @@ musicConnection	MainActivity.java	/^    private ServiceConnection musicConnectio
 musicService	MainActivity.java	/^    private MusicService musicService;$/;"	f	class:MainActivity	file:
 newInstance	MainActivity.java	/^        public static TabFragment newInstance(String sectionName) $/;"	m	class:MainActivity.TabFragment
 noisyReceiver	MainActivity.java	/^    private NoisyAudioStreamReceiver noisyReceiver;$/;"	f	class:MainActivity	file:
+npArtist	MainActivity.java	/^    private TextView npArtist;$/;"	f	class:MainActivity	file:
+npArtwork	MainActivity.java	/^    private ImageView npArtwork;$/;"	f	class:MainActivity	file:
+npPlayPauseButton	MainActivity.java	/^    private CheckBox npPlayPauseButton;$/;"	f	class:MainActivity	file:
+npRoot	MainActivity.java	/^    private PercentRelativeLayout npRoot;$/;"	f	class:MainActivity	file:
+npSeekbar	MainActivity.java	/^    private SeekBar npSeekbar;$/;"	f	class:MainActivity	file:
+npTitle	MainActivity.java	/^    private TextView npTitle;$/;"	f	class:MainActivity	file:
 onAttach	MainActivity.java	/^        public void onAttach(Context context)$/;"	m	class:MainActivity.TabFragment
 onAudioFocusChange	MusicService.java	/^    public void onAudioFocusChange(int focusChange)$/;"	m	class:MusicService
 onBind	MusicService.java	/^    public IBinder onBind(Intent arg0)$/;"	m	class:MusicService
@@ -191,6 +197,7 @@ playbackPaused	MainActivity.java	/^    private boolean playbackPaused = false;$/
 player	MusicService.java	/^    private MediaPlayer player;$/;"	f	class:MusicService	file:
 populateSongsList	MainActivity.java	/^    public void populateSongsList()$/;"	m	class:MainActivity
 radius	BlurTransformation.java	/^    private float radius;$/;"	f	class:BlurTransformation	file:
+rootLayout	MainActivity.java	/^    private SlidingUpPanelLayout rootLayout;$/;"	f	class:MainActivity	file:
 sDefaultTimeout	CustomControllerView.java	/^    private static final int    sDefaultTimeout = 3000;$/;"	f	class:VideoControllerView	file:
 seek	MusicService.java	/^    public void seek(int posn)$/;"	m	class:MusicService
 seekTo	CustomControllerView.java	/^        void    seekTo(int pos);$/;"	m	interface:VideoControllerView.MediaPlayerControl

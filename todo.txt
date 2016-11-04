@@ -45,34 +45,45 @@
             + Include Picasso call to modify background
     + Modify code so that updateViews is called before the song is loaded 
     + Fix AppBar: disable scroll and make transparent
+    + Bugfix: inflation fails oncreateview
+        * Issue: populateSongsList not yet called when onCreateView is invoked
+        * Fix: call populateSongsList directly inside getPermission
 
 //end-completed
 
 
 
 Next Commit:
-
-
+    - Now Playing SlidingPanel
+        + Modify activity_main
+            - Make SlidingPanel root
+            - Use PercentRelativeLayout for nowPlaying
+        + Change npRoot to PercentRelativeLayout
+        + Change initContollerBar to initControllers()
+            + Initialize the nowPlaying panel's views
+        + Modify updateViews()
+            + Add code to update the nowPlaying panel's views
+        - Seekbar:
+            + Set up layout
+            + Set up changeListener
 
 
 
 Current Task:
-    + Fix inflation fail bug oncreateview
+    - Now Playing SlidingPanel
+        - Seekbar:
+            - Hook up with songDuration
+            - Add textView to show current and max song's duration
 
 
-
-
-
-    - Now Playing Activity
-        - Action bar Setings menu
-            - Add to Playlist
-            - Settings
         - LongClick on Image Popup/Context menu
             - Go to Artist
             - Go to Album
+            - Add to Playlist
+            - Settings
         - Controls:
-            - Soundcloud-like waveform to scroll through song
             - Fav button (auto add to "Fav" playlist)
+            - Seekbar
             - Current time, total-current time 
             - Shuffle
             - Prev, Play/pause, Next
@@ -85,7 +96,7 @@ Current Task:
 Bugs:
     - Audio_focus temporary loss (i.e. message) breaks app
     - Selecting a song while paused doesn't refresh play button
-    - Inflate fail (onCreateView invoked only when viewPager is scrolled)
+    + Inflate fail (onCreateView invoked only when viewPager is scrolled)
         * Issue: onCreateView is called before populateSongsList is called
 
 

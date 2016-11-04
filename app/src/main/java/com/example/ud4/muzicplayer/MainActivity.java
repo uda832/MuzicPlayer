@@ -13,6 +13,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.content.ContextCompat;
+import android.support.percent.PercentRelativeLayout;
 import android.Manifest;
 import com.example.ud4.muzicplayer.MusicService.MusicBinder;
 
@@ -38,7 +39,8 @@ import android.widget.RelativeLayout;
 import android.widget.ImageView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ListView;
@@ -62,11 +64,16 @@ import android.content.Context;
 import android.content.ContentResolver;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState;
 //end-imports
 
 public class MainActivity extends AppCompatActivity implements ServiceCallback, Target
 {
     private static final int PERMISSIONS_EXTERNAL = 0;
+    private SlidingUpPanelLayout rootLayout;
     private ViewPager mViewPager;
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ArrayList<Song> songsList;
@@ -85,6 +92,13 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
     private TextView cbTitle;
     private TextView cbArtist;
     private CheckBox cbPlayPauseButton;
+
+    private PercentRelativeLayout npRoot;
+    private ImageView npArtwork;
+    private TextView npTitle;
+    private TextView npArtist;
+    private SeekBar npSeekbar;
+    private CheckBox npPlayPauseButton;
 
     private BlurTransformation blurTransformation;
     private Point backgroundSize;
@@ -119,12 +133,57 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
         backgroundSize = calcBackgroundSize(getWindowManager().getDefaultDisplay());
 
         //setController();
-        initControllerBar();
+        initControllers();
 
         //Handle NOISY events
         noisyReceiver = new NoisyAudioStreamReceiver();
         IntentFilter noiseFilter = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
         registerReceiver(noisyReceiver, noiseFilter);
+
+        //SlidingPanel
+        rootLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
+        rootLayout.addPanelSlideListener(new PanelSlideListener() 
+        {
+            // PanelSlide
+            //***********
+            @Override
+            public void onPanelSlide(View panel, float slideOffset)
+            {
+                //Show NowPlaying
+                if (slideOffset > 0.60)
+                {
+                    //HIDE ControllerBar Views
+                    cbArtwork.setVisibility(View.INVISIBLE);
+                    cbTitle.setVisibility(View.INVISIBLE);
+                    cbArtist.setVisibility(View.INVISIBLE);
+                    cbPlayPauseButton.setVisibility(View.INVISIBLE);
+                }
+                //Show ControllerBar
+                else
+                {
+                    //SHOW ControllerBar Views
+                    cbArtwork.setVisibility(View.VISIBLE);
+                    cbTitle.setVisibility(View.VISIBLE);
+                    cbArtist.setVisibility(View.VISIBLE);
+                    cbPlayPauseButton.setVisibility(View.VISIBLE);
+                }
+            }//end-slide
+
+            // PanelState
+            //***********
+            @Override
+            public void onPanelStateChanged(View panel, PanelState previousState, PanelState newState) 
+            {
+                View decorView = getWindow().getDecorView();
+
+                //SHOW-HIDE the statusBar
+                if (newState == PanelState.COLLAPSED)
+                    decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+                else if (newState == PanelState.EXPANDED)
+                    decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
+
+            }//end-state
+        });
     }//end-onCreate
 
     /** OnStart  */
@@ -564,35 +623,75 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
         //controller.show(0);
     }//end
 
-    /** InitContollerBar */
+    /** InitContollers */
     //*******************************************************
-    public void initControllerBar()
+    public void initControllers()
     {
+        //ControllerBar Views
         cbRoot = (RelativeLayout) findViewById(R.id.controller_bar);
         cbArtwork = (ImageView) cbRoot.findViewById(R.id.cb_art);
         cbTitle = (TextView) cbRoot.findViewById(R.id.cb_title);
         cbArtist = (TextView) cbRoot.findViewById(R.id.cb_artist);
         cbPlayPauseButton = (CheckBox) cbRoot.findViewById(R.id.cb_play_pause);
 
-        //Listener for ControllerBar -- Go to NowPlayingActivity
-        cbRoot.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View view)
-            {
-                // IMPLEMENT ME:
-                // Intent to go to NowPlayingActivity
-                Toast.makeText(getApplicationContext(), "Go To NowPlayingActivity", Toast.LENGTH_SHORT).show();   
-            }
-        });
+        //NowPlayingPanel Views
+        npRoot = (PercentRelativeLayout) findViewById(R.id.now_playing_root);
+        npArtwork = (ImageView) npRoot.findViewById(R.id.np_art);
+        npTitle = (TextView) npRoot.findViewById(R.id.np_title);
+        npArtist = (TextView) npRoot.findViewById(R.id.np_artist);
+        npSeekbar = (SeekBar) npRoot.findViewById(R.id.np_seekbar);
+        npPlayPauseButton = (CheckBox) npRoot.findViewById(R.id.np_play_pause);
 
-        //Listener for Play/Pause -- send message to the MediaPlaer
+        //SeekBarChangeListener
+        npSeekbar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() 
+        {//*****
+            int progress = 0;
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser)
+            {
+                progress = progresValue;
+            }
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                Toast.makeText(getApplicationContext(), "Stopped at:" + progress, Toast.LENGTH_SHORT).show();
+            }
+        });//end-seekbar
+
+        //PlayPauseButton Listener for the ControllerBar
         cbPlayPauseButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() 
-        {
+        {//*****
             @Override
             public void onCheckedChanged(CompoundButton v, boolean flag) 
             {
                 CheckBox button = (CheckBox) v;
                 boolean state = button.isChecked();
+                npPlayPauseButton.setChecked(state);
+
+                //IsPlaying
+                if (state)
+                    musicService.go();
+                //IsPaused
+                else
+                {
+                    playbackPaused = true;
+                    musicService.pausePlayer();
+                }
+            }
+        });//end
+
+        //PlayPauseButton Listener for the NowPlayingPanel
+        npPlayPauseButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() 
+        {//*****
+            @Override
+            public void onCheckedChanged(CompoundButton v, boolean flag) 
+            {
+                CheckBox button = (CheckBox) v;
+                boolean state = button.isChecked();
+                cbPlayPauseButton.setChecked(state);
                 
                 //IsPlaying
                 if (state)
@@ -604,9 +703,10 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
                     musicService.pausePlayer();
                 }
             }
-        });
+        });//end
 
     }//end
+
 
     /** UpdateViews */
     //*******************************************************
@@ -630,12 +730,18 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
                .transform(blurTransformation)
                .into(this);
 
-        //ControllerBar image
+        //Images
         Picasso.with(this)
                .load(uri)
                .fit()
                .centerCrop()
                .into(cbArtwork);
+        Picasso.with(this)
+               .load(uri)
+               .fit()
+               .centerCrop()
+               .into(npArtwork);
+
         //Song Title
         cbTitle.setText(toDisplay.getTitle());
         cbTitle.setEllipsize(TextUtils.TruncateAt.MARQUEE);
@@ -643,12 +749,22 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
         cbTitle.setMarqueeRepeatLimit(-1);
         cbTitle.setSelected(true);
 
+        npTitle.setText(toDisplay.getTitle());
+        npTitle.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+        npTitle.setSingleLine(true);
+        npTitle.setMarqueeRepeatLimit(-1);
+        npTitle.setSelected(true);
+
         //Artist
         cbArtist.setText(toDisplay.getArtist());
+        npArtist.setText(toDisplay.getArtist());
 
         //PlayPauseButton
         if(musicService!=null && bindFlag)
+        {
             cbPlayPauseButton.setChecked(musicService.isPlaying());
+            npPlayPauseButton.setChecked(musicService.isPlaying());
+        }
     }//end-updater
 
 
