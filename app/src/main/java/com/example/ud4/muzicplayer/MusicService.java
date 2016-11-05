@@ -1,4 +1,11 @@
+ /**
+ * MusicService Class
+ *
+ *
+ *
+ */
 package com.example.ud4.muzicplayer;
+
 
 import java.util.Random;
 import java.util.ArrayList;
@@ -15,11 +22,14 @@ import android.os.Binder;
 import android.os.PowerManager;
 import android.os.IBinder;
 import android.util.Log;
+import android.support.v4.content.LocalBroadcastManager;
 
 
 
 public class MusicService extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnCompletionListener, AudioManager.OnAudioFocusChangeListener
 {
+    public static final String SEEKBAR_RESULT = "com.example.ud4.muzicplayer.SEEKBAR_RES";
+    public static final String SEEKBAR_MAX = "com.example.ud4.muzicplayer.SEEKBAR_MAX";
     private MediaPlayer player;
     private ArrayList<Song> songs;
     private final IBinder musicBind = new MusicBinder();
@@ -29,6 +39,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     private static final int NOTIFY_ID=1;
     //private MusicController controller;
     private ServiceCallback updaterCallback;
+    private LocalBroadcastManager broadcaster;
 
     /** OnCreate  */
     //*******************************************************
@@ -41,7 +52,8 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
 
         AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         audioManager.requestAudioFocus(this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
-        
+        broadcaster = LocalBroadcastManager.getInstance(this);
+
     }//end
 
     /** OnAudioFocusChange */
@@ -105,6 +117,10 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         notIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendInt = PendingIntent.getActivity(this, 0, notIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
+        //Send SeekBar info
+        sendSeekBarMax();
+
+
         //Notification
         Notification.Builder builder = new Notification.Builder(this);
         builder.setContentIntent(pendInt)
@@ -116,14 +132,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
 		Notification not = builder.build();
 		startForeground(NOTIFY_ID, not);
 
-        ////Update controllerBar
-        //if (updaterCallback != null)
-        //{
-            //updaterCallback.updateControllerBar();
-            //updaterCallback.updateBackground();
-        //}
-
-        //controller.show(0);
+        //SendSeekBarInfo
     }//end
 
     /** OnCompletion  */
@@ -240,7 +249,9 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         catch(Exception e){
             Log.e("MUSIC SERVICE", "Error setting data source", e);
         }
-        
+
+
+
         player.prepareAsync();
     }//end
 
@@ -303,7 +314,14 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         updaterCallback = callbacks;
     }//end
 
-
+    /** SendSeekBarMax   */
+    //*******************************************************
+    private void sendSeekBarMax()
+    {
+        Intent intent = new Intent(SEEKBAR_RESULT);
+        intent.putExtra(SEEKBAR_MAX, (int) player.getDuration());
+        broadcaster.sendBroadcast(intent);
+    }//end-Send
 }
 
 

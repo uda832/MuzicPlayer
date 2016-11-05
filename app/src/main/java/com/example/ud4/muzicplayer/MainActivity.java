@@ -49,14 +49,17 @@ import android.text.TextUtils;
 
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.Handler;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.BroadcastReceiver;
+import android.support.v4.content.LocalBroadcastManager;
 import android.content.ServiceConnection;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.concurrent.TimeUnit;
 
 import android.media.AudioManager;
 import android.net.Uri;
@@ -98,11 +101,14 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
     private TextView npTitle;
     private TextView npArtist;
     private SeekBar npSeekbar;
+    private TextView npCurrentTime;
+    private TextView npMaxTime;
     private CheckBox npPlayPauseButton;
 
     private BlurTransformation blurTransformation;
     private Point backgroundSize;
-
+    private BroadcastReceiver seekbarReceiver;
+    private Handler mHandler = new Handler();
     /** OnCreate  */
     //*******************************************************
     @Override
@@ -111,28 +117,25 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        songsList = new ArrayList<Song>();
-
         //Populates songsList -- Request permission if not granted already
+        songsList = new ArrayList<Song>();
         getPermission();
 
+        //Setup toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //Adapter for each Fragment
+        //Set up Sections with fragments (Songs, Albums, etc.)
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-
-        //Hook ViewPager with the adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
       
+
         blurTransformation = new BlurTransformation(this, 25F);
         backgroundSize = calcBackgroundSize(getWindowManager().getDefaultDisplay());
 
-        //setController();
         initControllers();
 
         //Handle NOISY events
@@ -142,9 +145,9 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
 
         //SlidingPanel
         rootLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
-        rootLayout.addPanelSlideListener(new PanelSlideListener() 
+        rootLayout.addPanelSlideListener(new PanelSlideListener()
         {
-            // PanelSlide
+            // Slide
             //***********
             @Override
             public void onPanelSlide(View panel, float slideOffset)
@@ -169,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
                 }
             }//end-slide
 
-            // PanelState
+            // State
             //***********
             @Override
             public void onPanelStateChanged(View panel, PanelState previousState, PanelState newState) 
@@ -184,6 +187,39 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
 
             }//end-state
         });
+
+        seekbarReceiver = new BroadcastReceiver()
+        {//******
+            @Override
+            public void onReceive(Context context, Intent intent)
+            {
+                //Player has prepared the song:
+                
+                //Update SeekBar
+                int seekBarMax = intent.getIntExtra(MusicService.SEEKBAR_MAX, 0) / 1000;
+                String maxTime = toSeconds(seekBarMax);
+                npSeekbar.setMax(seekBarMax);
+                npMaxTime.setText(maxTime);
+
+                //Make sure you update Seekbar on UI thread
+                MainActivity.this.runOnUiThread(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        if (musicService!=null && bindFlag)
+                        {
+                            int pos = musicService.getCurrentPos() / 1000;
+                            npSeekbar.setProgress(pos);
+                            String currentTime = toSeconds(pos);
+                            npCurrentTime.setText(currentTime);
+                        }
+                        mHandler.postDelayed(this, 1000);
+                    }
+                });
+            }
+        };//end-receiver
+
     }//end-onCreate
 
     /** OnStart  */
@@ -236,6 +272,7 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
             updateViews();
             paused = false;
         }
+        LocalBroadcastManager.getInstance(this).registerReceiver((seekbarReceiver), new IntentFilter(MusicService.SEEKBAR_RESULT));
     }//end
 
     /** OnPause  */
@@ -245,6 +282,7 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
     {
         super.onPause();
         paused = true;
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(seekbarReceiver);
     }//end
 
     
@@ -473,6 +511,7 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
 
 
 
+
     /** PopulateSongsList */
     //*******************************************************
     public void populateSongsList()
@@ -640,6 +679,8 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
         npTitle = (TextView) npRoot.findViewById(R.id.np_title);
         npArtist = (TextView) npRoot.findViewById(R.id.np_artist);
         npSeekbar = (SeekBar) npRoot.findViewById(R.id.np_seekbar);
+        npCurrentTime = (TextView) npRoot.findViewById(R.id.np_current_time);
+        npMaxTime = (TextView) npRoot.findViewById(R.id.np_max_time);
         npPlayPauseButton = (CheckBox) npRoot.findViewById(R.id.np_play_pause);
 
         //SeekBarChangeListener
@@ -651,6 +692,15 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
             public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser)
             {
                 progress = progresValue;
+
+                if(musicService!=null && bindFlag && fromUser)
+                {
+                    musicService.seek(progress); 
+                }
+                else
+                {
+                 // the event was fired from code and you shouldn't call player.seekTo()
+                }
             }
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
@@ -768,6 +818,14 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
     }//end-updater
 
 
+    /** Convert toSeconds */
+    //*******************************************************
+    private String toSeconds(int time)
+    {
+        long min = TimeUnit.SECONDS.toMinutes(time);
+        long sec = time - TimeUnit.MINUTES.toSeconds(min);
+        return String.format("%02d", min) + ":" + String.format("%02d", sec);
+    }//end-convert
 
     /** CalcBackgroundSize */
     //*******************************************************

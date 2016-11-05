@@ -20,6 +20,8 @@ MusicService	MusicService.java	/^public class MusicService extends Service imple
 NOTIFY_ID	MusicService.java	/^    private static final int NOTIFY_ID=1;$/;"	f	class:MusicService	file:
 NoisyAudioStreamReceiver	MainActivity.java	/^    private class NoisyAudioStreamReceiver extends BroadcastReceiver$/;"	c	class:MainActivity
 PERMISSIONS_EXTERNAL	MainActivity.java	/^    private static final int PERMISSIONS_EXTERNAL = 0;$/;"	f	class:MainActivity	file:
+SEEKBAR_MAX	MusicService.java	/^    public static final String SEEKBAR_MAX = "com.example.ud4.muzicplayer.SEEKBAR_MAX";$/;"	f	class:MusicService
+SEEKBAR_RESULT	MusicService.java	/^    public static final String SEEKBAR_RESULT = "com.example.ud4.muzicplayer.SEEKBAR_RES";$/;"	f	class:MusicService
 SHOW_PROGRESS	CustomControllerView.java	/^    private static final int    SHOW_PROGRESS = 2;$/;"	f	class:VideoControllerView	file:
 SectionsPagerAdapter	MainActivity.java	/^        public SectionsPagerAdapter(FragmentManager fm) {$/;"	m	class:MainActivity.SectionsPagerAdapter
 SectionsPagerAdapter	MainActivity.java	/^    public class SectionsPagerAdapter extends FragmentPagerAdapter$/;"	c	class:MainActivity
@@ -43,6 +45,7 @@ artistView	SongsAdapter.java	/^        public TextView artistView;$/;"	f	class:S
 backgroundSize	MainActivity.java	/^    private Point backgroundSize;$/;"	f	class:MainActivity	file:
 bindFlag	MainActivity.java	/^    private boolean bindFlag;$/;"	f	class:MainActivity	file:
 blurTransformation	MainActivity.java	/^    private BlurTransformation blurTransformation;$/;"	f	class:MainActivity	file:
+broadcaster	MusicService.java	/^    private LocalBroadcastManager broadcaster;$/;"	f	class:MusicService	file:
 calcBackgroundSize	MainActivity.java	/^    private static Point calcBackgroundSize(Display display)$/;"	m	class:MainActivity	file:
 canPause	CustomControllerView.java	/^        boolean canPause();$/;"	m	interface:VideoControllerView.MediaPlayerControl
 canSeekBackward	CustomControllerView.java	/^        boolean canSeekBackward();$/;"	m	interface:VideoControllerView.MediaPlayerControl
@@ -124,6 +127,7 @@ mFromXml	CustomControllerView.java	/^    private boolean             mFromXml;$/
 mFullscreenButton	CustomControllerView.java	/^    private ImageButton         mFullscreenButton;$/;"	f	class:VideoControllerView	file:
 mFullscreenListener	CustomControllerView.java	/^    private View.OnClickListener mFullscreenListener = new View.OnClickListener() {$/;"	f	class:VideoControllerView	file:
 mHandler	CustomControllerView.java	/^    private Handler             mHandler = new MessageHandler(this);$/;"	f	class:VideoControllerView	file:
+mHandler	MainActivity.java	/^    private Handler mHandler = new Handler();$/;"	f	class:MainActivity	file:
 mId	Album.java	/^    private long mId;$/;"	f	class:Album	file:
 mId	Song.java	/^    private long mId;$/;"	f	class:Song	file:
 mListenersSet	CustomControllerView.java	/^    private boolean             mListenersSet;$/;"	f	class:VideoControllerView	file:
@@ -154,6 +158,8 @@ newInstance	MainActivity.java	/^        public static TabFragment newInstance(St
 noisyReceiver	MainActivity.java	/^    private NoisyAudioStreamReceiver noisyReceiver;$/;"	f	class:MainActivity	file:
 npArtist	MainActivity.java	/^    private TextView npArtist;$/;"	f	class:MainActivity	file:
 npArtwork	MainActivity.java	/^    private ImageView npArtwork;$/;"	f	class:MainActivity	file:
+npCurrentTime	MainActivity.java	/^    private TextView npCurrentTime;$/;"	f	class:MainActivity	file:
+npMaxTime	MainActivity.java	/^    private TextView npMaxTime;$/;"	f	class:MainActivity	file:
 npPlayPauseButton	MainActivity.java	/^    private CheckBox npPlayPauseButton;$/;"	f	class:MainActivity	file:
 npRoot	MainActivity.java	/^    private PercentRelativeLayout npRoot;$/;"	f	class:MainActivity	file:
 npSeekbar	MainActivity.java	/^    private SeekBar npSeekbar;$/;"	f	class:MainActivity	file:
@@ -201,6 +207,8 @@ rootLayout	MainActivity.java	/^    private SlidingUpPanelLayout rootLayout;$/;"	
 sDefaultTimeout	CustomControllerView.java	/^    private static final int    sDefaultTimeout = 3000;$/;"	f	class:VideoControllerView	file:
 seek	MusicService.java	/^    public void seek(int posn)$/;"	m	class:MusicService
 seekTo	CustomControllerView.java	/^        void    seekTo(int pos);$/;"	m	interface:VideoControllerView.MediaPlayerControl
+seekbarReceiver	MainActivity.java	/^    private BroadcastReceiver seekbarReceiver;$/;"	f	class:MainActivity	file:
+sendSeekBarMax	MusicService.java	/^    private void sendSeekBarMax()$/;"	m	class:MusicService	file:
 setAnchorView	CustomControllerView.java	/^    public void setAnchorView(ViewGroup view) {$/;"	m	class:VideoControllerView
 setCallback	MusicService.java	/^    public void setCallback(ServiceCallback callbacks)$/;"	m	class:MusicService
 setEnabled	CustomControllerView.java	/^    public void setEnabled(boolean enabled) {$/;"	m	class:VideoControllerView
@@ -221,6 +229,7 @@ sortSongsList	MainActivity.java	/^    public void sortSongsList()$/;"	m	class:Ma
 start	CustomControllerView.java	/^        void    start();$/;"	m	interface:VideoControllerView.MediaPlayerControl
 stringForTime	CustomControllerView.java	/^    private String stringForTime(int timeMs) {$/;"	m	class:VideoControllerView	file:
 titleView	SongsAdapter.java	/^        public TextView titleView;$/;"	f	class:SongsAdapter.ViewHolder
+toSeconds	MainActivity.java	/^    private String toSeconds(int time)$/;"	m	class:MainActivity	file:
 toggleFullScreen	CustomControllerView.java	/^        void    toggleFullScreen();$/;"	m	interface:VideoControllerView.MediaPlayerControl
 transform	BlurTransformation.java	/^    public Bitmap transform(Bitmap bitmap) {$/;"	m	class:BlurTransformation
 updateFullScreen	CustomControllerView.java	/^    public void updateFullScreen() {$/;"	m	class:VideoControllerView

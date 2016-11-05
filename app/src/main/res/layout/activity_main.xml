@@ -84,16 +84,43 @@
                 android:textSize="14sp"
                 android:textColor="#FFFFFF" />
             <!--NP Controllers-->
-            <SeekBar
-                android:id="@+id/np_seekbar"
-                android:layout_below="@id/np_artist"
-                app:layout_marginTopPercent="5%"
-                app:layout_widthPercent="95%"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true" />
+            <RelativeLayout
+                    android:id="@+id/np_controller_root"
+                    android:layout_below="@id/np_artist"
+                    app:layout_marginTopPercent="5%"
+                    app:layout_widthPercent="95%"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true" >
+                <SeekBar
+                    android:id="@+id/np_seekbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    />
+                <TextView
+                    android:id="@+id/np_current_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/np_seekbar"
+                    android:layout_alignParentLeft="true"
+                    android:text="00:00"
+                    android:textSize="9sp"
+                    android:textColor="#FFFFFF"
+                    />
+                <TextView
+                    android:id="@+id/np_max_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/np_seekbar"
+                    android:layout_alignParentRight="true"
+                    android:text="00:00"
+                    android:textSize="9sp"
+                    android:textColor="#FFFFFF"
+                    />
+            </RelativeLayout>
             <CheckBox
                 android:id="@+id/np_play_pause"
-                android:layout_below="@id/np_seekbar"
+                android:layout_below="@id/np_controller_root"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:scaleX="2.0"

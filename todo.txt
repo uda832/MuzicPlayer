@@ -48,12 +48,6 @@
     + Bugfix: inflation fails oncreateview
         * Issue: populateSongsList not yet called when onCreateView is invoked
         * Fix: call populateSongsList directly inside getPermission
-
-//end-completed
-
-
-
-Next Commit:
     - Now Playing SlidingPanel
         + Modify activity_main
             - Make SlidingPanel root
@@ -67,28 +61,43 @@ Next Commit:
             + Set up layout
             + Set up changeListener
 
+//end-completed
+
+
+
+Next Commit:
+    - Seekbar Functionality:
+        - Setup currentTime, maxTime views
+        - Connect to MediaPlayer inside MusicService
+
+        - Update the seekbar's times and progress using a broadcaster
+            - Setup BroadcastReceiver in MainActivity which grabs the
+              timeInfo sent from the MusicService
+            - Setup broadcast sender method which contains the current
+              song's time info
+            - Invoke sendBroadcast method when the MediaPlayer is prepared
 
 
 Current Task:
     - Now Playing SlidingPanel
         - Seekbar:
-            - Hook up with songDuration
+            + Setup current-time, max-time views
+            + Hook up with MediaPlayer
+                + Define BroadcastReciever b
+                    + onCreate in main activity: b = new BroadCastReciever
+                    + onResume: register
+                    + onPause: unregister
+                + onPrepared inside Service:
+                    + sendSeekbarInfo()
+                        + send
+
+                    
             - Add textView to show current and max song's duration
 
 
-        - LongClick on Image Popup/Context menu
-            - Go to Artist
-            - Go to Album
-            - Add to Playlist
-            - Settings
-        - Controls:
-            - Fav button (auto add to "Fav" playlist)
-            - Seekbar
-            - Current time, total-current time 
-            - Shuffle
-            - Prev, Play/pause, Next
-
-
+Bugfix:
+    * Sliding progress doesn't work
+    * Always restarts the song from the beginning!
 
 
     
@@ -108,6 +117,18 @@ TESTS before deploying:
 
 
 Future Tasks:
+    - Now Playing SlidingPanel
+        - LongClick on Image Popup/Context menu
+            - Go to Artist
+            - Go to Album
+            - Add to Playlist
+            - Settings
+        - Controls:
+            - Fav button (auto add to "Fav" playlist)
+            - Seekbar
+            - Current time, total-current time 
+            - Shuffle
+            - Prev, Play/pause, Next
     - Animate hide when fragment is scrolled
     - Use headphone controllers
         - Defaults (pause/play, double-click to playNext, triple for prev etc.)
