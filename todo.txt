@@ -60,27 +60,6 @@
         - Seekbar:
             + Set up layout
             + Set up changeListener
-
-//end-completed
-
-
-
-Next Commit:
-    - Seekbar Functionality:
-        - Setup currentTime, maxTime views
-        - Connect to MediaPlayer inside MusicService
-
-        - Update the seekbar's times and progress using a broadcaster
-            - Setup BroadcastReceiver in MainActivity which grabs the
-              timeInfo sent from the MusicService
-            - Setup broadcast sender method which contains the current
-              song's time info
-            - Invoke sendBroadcast method when the MediaPlayer is prepared
-
-
-Current Task:
-    - Now Playing SlidingPanel
-        - Seekbar:
             + Setup current-time, max-time views
             + Hook up with MediaPlayer
                 + Define BroadcastReciever b
@@ -90,9 +69,21 @@ Current Task:
                 + onPrepared inside Service:
                     + sendSeekbarInfo()
                         + send
+            + Add textView to show current and max song's duration
 
-                    
-            - Add textView to show current and max song's duration
+//end-completed
+
+
+
+Next Commit:
+
+
+Current Task:
+    - Refactor code
+
+
+
+
 
 
 Bugfix:

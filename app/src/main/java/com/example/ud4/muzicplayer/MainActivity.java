@@ -76,26 +76,23 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState;
 public class MainActivity extends AppCompatActivity implements ServiceCallback, Target
 {
     private static final int PERMISSIONS_EXTERNAL = 0;
-    private SlidingUpPanelLayout rootLayout;
     private ViewPager mViewPager;
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ArrayList<Song> songsList;
 
-    //private MusicController controller;
     private MusicService musicService;
     private Intent playIntent;
     private boolean bindFlag;
-
     private boolean paused = false;
     private boolean playbackPaused = false;
-    private NoisyAudioStreamReceiver noisyReceiver;
     
+    //Views and Layouts
+    private SlidingUpPanelLayout rootLayout;
     private RelativeLayout cbRoot;
     private ImageView cbArtwork;
     private TextView cbTitle;
     private TextView cbArtist;
     private CheckBox cbPlayPauseButton;
-
     private PercentRelativeLayout npRoot;
     private ImageView npArtwork;
     private TextView npTitle;
@@ -108,7 +105,9 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
     private BlurTransformation blurTransformation;
     private Point backgroundSize;
     private BroadcastReceiver seekbarReceiver;
+    private NoisyAudioStreamReceiver noisyReceiver;
     private Handler mHandler = new Handler();
+
     /** OnCreate  */
     //*******************************************************
     @Override
@@ -131,7 +130,6 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
         mViewPager.setAdapter(mSectionsPagerAdapter);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
-      
 
         blurTransformation = new BlurTransformation(this, 25F);
         backgroundSize = calcBackgroundSize(getWindowManager().getDefaultDisplay());
@@ -145,80 +143,10 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
 
         //SlidingPanel
         rootLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
-        rootLayout.addPanelSlideListener(new PanelSlideListener()
-        {
-            // Slide
-            //***********
-            @Override
-            public void onPanelSlide(View panel, float slideOffset)
-            {
-                //Show NowPlaying
-                if (slideOffset > 0.60)
-                {
-                    //HIDE ControllerBar Views
-                    cbArtwork.setVisibility(View.INVISIBLE);
-                    cbTitle.setVisibility(View.INVISIBLE);
-                    cbArtist.setVisibility(View.INVISIBLE);
-                    cbPlayPauseButton.setVisibility(View.INVISIBLE);
-                }
-                //Show ControllerBar
-                else
-                {
-                    //SHOW ControllerBar Views
-                    cbArtwork.setVisibility(View.VISIBLE);
-                    cbTitle.setVisibility(View.VISIBLE);
-                    cbArtist.setVisibility(View.VISIBLE);
-                    cbPlayPauseButton.setVisibility(View.VISIBLE);
-                }
-            }//end-slide
+        //rootLayout.addPanelSlideListener(new PanelSlideListener()
+        rootLayout.addPanelSlideListener(new MyPanelSlideListener());
 
-            // State
-            //***********
-            @Override
-            public void onPanelStateChanged(View panel, PanelState previousState, PanelState newState) 
-            {
-                View decorView = getWindow().getDecorView();
-
-                //SHOW-HIDE the statusBar
-                if (newState == PanelState.COLLAPSED)
-                    decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-                else if (newState == PanelState.EXPANDED)
-                    decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
-
-            }//end-state
-        });
-
-        seekbarReceiver = new BroadcastReceiver()
-        {//******
-            @Override
-            public void onReceive(Context context, Intent intent)
-            {
-                //Player has prepared the song:
-                
-                //Update SeekBar
-                int seekBarMax = intent.getIntExtra(MusicService.SEEKBAR_MAX, 0) / 1000;
-                String maxTime = toSeconds(seekBarMax);
-                npSeekbar.setMax(seekBarMax);
-                npMaxTime.setText(maxTime);
-
-                //Make sure you update Seekbar on UI thread
-                MainActivity.this.runOnUiThread(new Runnable()
-                {
-                    @Override
-                    public void run()
-                    {
-                        if (musicService!=null && bindFlag)
-                        {
-                            int pos = musicService.getCurrentPos() / 1000;
-                            npSeekbar.setProgress(pos);
-                            String currentTime = toSeconds(pos);
-                            npCurrentTime.setText(currentTime);
-                        }
-                        mHandler.postDelayed(this, 1000);
-                    }
-                });
-            }
-        };//end-receiver
+        seekbarReceiver = new SeekbarBroadcastReceiver();
 
     }//end-onCreate
 
@@ -509,6 +437,84 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
         }
     }//end
 
+    /** MyPanelSlideListener Class */
+    //*******************************************************
+    private class MyPanelSlideListener implements PanelSlideListener
+    {
+        // Slide
+        //***********
+        @Override
+        public void onPanelSlide(View panel, float slideOffset)
+        {
+            //Show NowPlaying
+            if (slideOffset > 0.60)
+            {
+                //HIDE ControllerBar Views
+                cbArtwork.setVisibility(View.INVISIBLE);
+                cbTitle.setVisibility(View.INVISIBLE);
+                cbArtist.setVisibility(View.INVISIBLE);
+                cbPlayPauseButton.setVisibility(View.INVISIBLE);
+            }
+            //Show ControllerBar
+            else
+            {
+                //SHOW ControllerBar Views
+                cbArtwork.setVisibility(View.VISIBLE);
+                cbTitle.setVisibility(View.VISIBLE);
+                cbArtist.setVisibility(View.VISIBLE);
+                cbPlayPauseButton.setVisibility(View.VISIBLE);
+            }
+        }//end-slide
+
+        // State
+        //***********
+        @Override
+        public void onPanelStateChanged(View panel, PanelState previousState, PanelState newState) 
+        {
+            View decorView = getWindow().getDecorView();
+
+            //SHOW-HIDE the statusBar
+            if (newState == PanelState.COLLAPSED)
+                decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+            else if (newState == PanelState.EXPANDED)
+                decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
+
+        }//end-state
+    }//end-listener
+
+    /** SeekbarBroadcastReceiver Class */
+    //*******************************************************
+    private class SeekbarBroadcastReceiver implements BroadcastReceiver
+    {
+        @Override
+        public void onReceive(Context context, Intent intent)
+        {
+            //Player has prepared the song:
+            
+            //Update SeekBar
+            int seekBarMax = intent.getIntExtra(MusicService.SEEKBAR_MAX, 0) / 1000;
+            String maxTime = toSeconds(seekBarMax);
+            npSeekbar.setMax(seekBarMax);
+            npMaxTime.setText(maxTime);
+
+            //Make sure you update Seekbar on UI thread
+            MainActivity.this.runOnUiThread(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    if (musicService!=null && bindFlag)
+                    {
+                        int pos = musicService.getCurrentPos() / 1000;
+                        npSeekbar.setProgress(pos);
+                        String currentTime = toSeconds(pos);
+                        npCurrentTime.setText(currentTime);
+                    }
+                    mHandler.postDelayed(this, 1000);
+                }
+            });
+        }
+    }//end-receiver
 
 
 
@@ -757,7 +763,6 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
 
     }//end
 
-
     /** UpdateViews */
     //*******************************************************
     @Override
@@ -862,5 +867,3 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
     }
     //end-TargetMethods
 }//end-class
-
-

@@ -17,6 +17,7 @@ MusicBinder	MusicService.java	/^    public class MusicBinder extends Binder$/;"	
 MusicController	MusicController.java	/^    public MusicController(Context c)$/;"	m	class:MusicController
 MusicController	MusicController.java	/^public class MusicController extends MediaController$/;"	c
 MusicService	MusicService.java	/^public class MusicService extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnCompletionListener, AudioManager.OnAudioFocusChangeListener$/;"	c
+MyPanelSlideListener	MainActivity.java	/^    private class MyPanelSlideListener implements PanelSlideListener$/;"	c	class:MainActivity
 NOTIFY_ID	MusicService.java	/^    private static final int NOTIFY_ID=1;$/;"	f	class:MusicService	file:
 NoisyAudioStreamReceiver	MainActivity.java	/^    private class NoisyAudioStreamReceiver extends BroadcastReceiver$/;"	c	class:MainActivity
 PERMISSIONS_EXTERNAL	MainActivity.java	/^    private static final int PERMISSIONS_EXTERNAL = 0;$/;"	f	class:MainActivity	file:
@@ -25,6 +26,7 @@ SEEKBAR_RESULT	MusicService.java	/^    public static final String SEEKBAR_RESULT
 SHOW_PROGRESS	CustomControllerView.java	/^    private static final int    SHOW_PROGRESS = 2;$/;"	f	class:VideoControllerView	file:
 SectionsPagerAdapter	MainActivity.java	/^        public SectionsPagerAdapter(FragmentManager fm) {$/;"	m	class:MainActivity.SectionsPagerAdapter
 SectionsPagerAdapter	MainActivity.java	/^    public class SectionsPagerAdapter extends FragmentPagerAdapter$/;"	c	class:MainActivity
+SeekbarBroadcastReceiver	MainActivity.java	/^    private class SeekbarBroadcastReceiver implements BroadcastReceiver$/;"	c	class:MainActivity
 ServiceCallback	ServiceCallback.java	/^public interface ServiceCallback$/;"	i
 Song	Album.java	/^    public Song(long id, String title, String artist, String album)$/;"	m	class:Album
 Song	Song.java	/^    public Song(long id, String title, String artist, long albumId)$/;"	m	class:Song
@@ -181,10 +183,13 @@ onFinishInflate	CustomControllerView.java	/^    public void onFinishInflate() {$
 onInitializeAccessibilityEvent	CustomControllerView.java	/^    public void onInitializeAccessibilityEvent(AccessibilityEvent event) {$/;"	m	class:VideoControllerView
 onInitializeAccessibilityNodeInfo	CustomControllerView.java	/^    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {$/;"	m	class:VideoControllerView
 onOptionsItemSelected	MainActivity.java	/^    public boolean onOptionsItemSelected(MenuItem item) {$/;"	m	class:MainActivity
+onPanelSlide	MainActivity.java	/^        public void onPanelSlide(View panel, float slideOffset)$/;"	m	class:MainActivity.MyPanelSlideListener
+onPanelStateChanged	MainActivity.java	/^        public void onPanelStateChanged(View panel, PanelState previousState, PanelState newState) $/;"	m	class:MainActivity.MyPanelSlideListener
 onPause	MainActivity.java	/^    protected void onPause()$/;"	m	class:MainActivity
 onPrepareLoad	MainActivity.java	/^    public void onPrepareLoad(Drawable placeHolderDrawable) {$/;"	m	class:MainActivity
 onPrepared	MusicService.java	/^    public void onPrepared(MediaPlayer mp)$/;"	m	class:MusicService
 onReceive	MainActivity.java	/^        public void onReceive(Context context, Intent intent)$/;"	m	class:MainActivity.NoisyAudioStreamReceiver
+onReceive	MainActivity.java	/^        public void onReceive(Context context, Intent intent)$/;"	m	class:MainActivity.SeekbarBroadcastReceiver
 onRequestPermissionsResult	MainActivity.java	/^    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults)$/;"	m	class:MainActivity
 onResume	MainActivity.java	/^    protected void onResume()$/;"	m	class:MainActivity
 onStart	MainActivity.java	/^    protected void onStart()$/;"	m	class:MainActivity

@@ -56,45 +56,6 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
 
     }//end
 
-    /** OnAudioFocusChange */
-    //*******************************************************
-    @Override
-    public void onAudioFocusChange(int focusChange)
-    {
-        switch (focusChange)
-        {
-            case AudioManager.AUDIOFOCUS_GAIN:
-                // resume playback
-                if (player == null) 
-                    initPlayer();
-                else if (!player.isPlaying()) 
-                    player.start();
-                player.setVolume(1.0f, 1.0f);
-                break;
-
-            case AudioManager.AUDIOFOCUS_LOSS:
-                // Lost focus for an unbounded amount of time: stop playback and release media player
-                player.release();
-                player = null;
-                break;
-
-            case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
-                // Lost focus for a short time, but we have to stop
-                // playback. We don't release the media player because playback
-                // is likely to resume
-                if (player.isPlaying()) 
-                    player.pause();
-                break;
-
-            case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
-                // Lost focus for a short time, but it's ok to keep playing
-                // at an attenuated level
-                if (player.isPlaying()) 
-                    player.setVolume(0.1f, 0.1f);
-                break;
-        }
-    }//end
-
     /** OnDestroy */
     //*******************************************************
     @Override
@@ -152,6 +113,45 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
             playSong();
         }
 	}//end
+
+    /** OnAudioFocusChange */
+    //*******************************************************
+    @Override
+    public void onAudioFocusChange(int focusChange)
+    {
+        switch (focusChange)
+        {
+            case AudioManager.AUDIOFOCUS_GAIN:
+                // resume playback
+                if (player == null) 
+                    initPlayer();
+                else if (!player.isPlaying()) 
+                    player.start();
+                player.setVolume(1.0f, 1.0f);
+                break;
+
+            case AudioManager.AUDIOFOCUS_LOSS:
+                // Lost focus for an unbounded amount of time: stop playback and release media player
+                player.release();
+                player = null;
+                break;
+
+            case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
+                // Lost focus for a short time, but we have to stop
+                // playback. We don't release the media player because playback
+                // is likely to resume
+                if (player.isPlaying()) 
+                    player.pause();
+                break;
+
+            case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
+                // Lost focus for a short time, but it's ok to keep playing
+                // at an attenuated level
+                if (player.isPlaying()) 
+                    player.setVolume(0.1f, 0.1f);
+                break;
+        }
+    }//end
 
     /** OnError  */
     //*******************************************************
@@ -250,26 +250,9 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
             Log.e("MUSIC SERVICE", "Error setting data source", e);
         }
 
-
-
         player.prepareAsync();
     }//end
 
-    //[>* Playnext   <]
-    ///[>******************************************************
-    //public void playNext()
-    //{
-    //}//end
-
-    //[>* PlayPrev   <]
-    ///[>******************************************************
-    //public void playPrev()
-    //{
-        //songPos--;
-        //if(songPos < 0)
-            //songPos = songs.size() - 1;
-		//playSong();
-    //}//end
 
     /** ControlActions   */
     //*******************************************************
@@ -298,14 +281,6 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         player.start();
     }
     //end-ControlActions
-
-
-    //[>* SetController<]
-    //******************************************************
-    //public void setController(MusicController c)
-    //{
-        //controller = c;
-    //}//end
 
     /** SetCallback   */
     //*******************************************************
