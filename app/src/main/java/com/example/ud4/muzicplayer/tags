@@ -26,7 +26,7 @@ SEEKBAR_RESULT	MusicService.java	/^    public static final String SEEKBAR_RESULT
 SHOW_PROGRESS	CustomControllerView.java	/^    private static final int    SHOW_PROGRESS = 2;$/;"	f	class:VideoControllerView	file:
 SectionsPagerAdapter	MainActivity.java	/^        public SectionsPagerAdapter(FragmentManager fm) {$/;"	m	class:MainActivity.SectionsPagerAdapter
 SectionsPagerAdapter	MainActivity.java	/^    public class SectionsPagerAdapter extends FragmentPagerAdapter$/;"	c	class:MainActivity
-SeekbarBroadcastReceiver	MainActivity.java	/^    private class SeekbarBroadcastReceiver implements BroadcastReceiver$/;"	c	class:MainActivity
+SeekbarBroadcastReceiver	MainActivity.java	/^    private class SeekbarBroadcastReceiver extends BroadcastReceiver$/;"	c	class:MainActivity
 ServiceCallback	ServiceCallback.java	/^public interface ServiceCallback$/;"	i
 Song	Album.java	/^    public Song(long id, String title, String artist, String album)$/;"	m	class:Album
 Song	Song.java	/^    public Song(long id, String title, String artist, long albumId)$/;"	m	class:Song
@@ -121,6 +121,7 @@ mContext	SongsAdapter.java	/^    private Context mContext;$/;"	f	class:SongsAdap
 mCurrentTime	CustomControllerView.java	/^    private TextView            mEndTime, mCurrentTime;$/;"	f	class:VideoControllerView	file:
 mDragging	CustomControllerView.java	/^    private boolean             mDragging;$/;"	f	class:VideoControllerView	file:
 mEndTime	CustomControllerView.java	/^    private TextView            mEndTime, mCurrentTime;$/;"	f	class:VideoControllerView	file:
+mExecutorService	MainActivity.java	/^    private final ScheduledExecutorService mExecutorService = Executors.newSingleThreadScheduledExecutor();$/;"	f	class:MainActivity	file:
 mFfwdButton	CustomControllerView.java	/^    private ImageButton         mFfwdButton;$/;"	f	class:VideoControllerView	file:
 mFfwdListener	CustomControllerView.java	/^    private View.OnClickListener mFfwdListener = new View.OnClickListener() {$/;"	f	class:VideoControllerView	file:
 mFormatBuilder	CustomControllerView.java	/^    StringBuilder               mFormatBuilder;$/;"	f	class:VideoControllerView
@@ -144,6 +145,7 @@ mProgress	CustomControllerView.java	/^    private ProgressBar         mProgress;
 mRewButton	CustomControllerView.java	/^    private ImageButton         mRewButton;$/;"	f	class:VideoControllerView	file:
 mRewListener	CustomControllerView.java	/^    private View.OnClickListener mRewListener = new View.OnClickListener() {$/;"	f	class:VideoControllerView	file:
 mRoot	CustomControllerView.java	/^    private View                mRoot;$/;"	f	class:VideoControllerView	file:
+mScheduleFuture	MainActivity.java	/^    private ScheduledFuture<?> mScheduleFuture;$/;"	f	class:MainActivity	file:
 mSectionsPagerAdapter	MainActivity.java	/^    private SectionsPagerAdapter mSectionsPagerAdapter;$/;"	f	class:MainActivity	file:
 mSeekListener	CustomControllerView.java	/^    private OnSeekBarChangeListener mSeekListener = new OnSeekBarChangeListener() {$/;"	f	class:VideoControllerView	file:
 mShowing	CustomControllerView.java	/^    private boolean             mShowing;$/;"	f	class:VideoControllerView	file:
@@ -232,6 +234,8 @@ songsAdapter	MainActivity.java	/^        private SongsAdapter songsAdapter;$/;"	
 songsList	MainActivity.java	/^    private ArrayList<Song> songsList;$/;"	f	class:MainActivity	file:
 sortSongsList	MainActivity.java	/^    public void sortSongsList()$/;"	m	class:MainActivity
 start	CustomControllerView.java	/^        void    start();$/;"	m	interface:VideoControllerView.MediaPlayerControl
+startSeekbarUpdater	MainActivity.java	/^    private void startSeekbarUpdater()$/;"	m	class:MainActivity	file:
+stopSeekbarUpdater	MainActivity.java	/^    private void stopSeekbarUpdater() $/;"	m	class:MainActivity	file:
 stringForTime	CustomControllerView.java	/^    private String stringForTime(int timeMs) {$/;"	m	class:VideoControllerView	file:
 titleView	SongsAdapter.java	/^        public TextView titleView;$/;"	f	class:SongsAdapter.ViewHolder
 toSeconds	MainActivity.java	/^    private String toSeconds(int time)$/;"	m	class:MainActivity	file:
@@ -239,6 +243,7 @@ toggleFullScreen	CustomControllerView.java	/^        void    toggleFullScreen();
 transform	BlurTransformation.java	/^    public Bitmap transform(Bitmap bitmap) {$/;"	m	class:BlurTransformation
 updateFullScreen	CustomControllerView.java	/^    public void updateFullScreen() {$/;"	m	class:VideoControllerView
 updatePausePlay	CustomControllerView.java	/^    public void updatePausePlay() {$/;"	m	class:VideoControllerView
+updateSeekbarTask	MainActivity.java	/^    private Runnable updateSeekbarTask = new Runnable()$/;"	f	class:MainActivity	file:
 updateViews	MainActivity.java	/^    public void updateViews()$/;"	m	class:MainActivity
 updateViews	ServiceCallback.java	/^    void updateViews();$/;"	m	interface:ServiceCallback
 updaterCallback	MusicService.java	/^    private ServiceCallback updaterCallback;$/;"	f	class:MusicService	file:

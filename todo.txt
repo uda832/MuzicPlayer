@@ -70,30 +70,34 @@
                     + sendSeekbarInfo()
                         + send
             + Add textView to show current and max song's duration
+    + Refactor code
 
 //end-completed
 
 
 
 Next Commit:
-
+     + Updating SeekBar:
+        + Bugfix:
+            + Issue: Seekbar dragging always made it reset to 0
+            + Fix: musicService.seek(progress * 1000) inside onProgressChanged 
+        + Update currentTime textView while dragging
+        + Stop the seekbarUpdater when playback is paused and resume once isPlaying
+            + startSeekbarUpdater
+            + stopSeekbarUpdater
 
 Current Task:
-    - Refactor code
+     
 
-
-
-
-
-
-Bugfix:
-    * Sliding progress doesn't work
-    * Always restarts the song from the beginning!
+Next Task:
+                
+             
 
 
     
 
 Bugs:
+    - While paused, getting a message starts playing
     - Audio_focus temporary loss (i.e. message) breaks app
     - Selecting a song while paused doesn't refresh play button
     + Inflate fail (onCreateView invoked only when viewPager is scrolled)

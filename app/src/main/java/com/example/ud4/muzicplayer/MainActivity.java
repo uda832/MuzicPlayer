@@ -60,6 +60,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 
 import android.media.AudioManager;
 import android.net.Uri;
@@ -106,7 +109,26 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
     private Point backgroundSize;
     private BroadcastReceiver seekbarReceiver;
     private NoisyAudioStreamReceiver noisyReceiver;
+    private final ScheduledExecutorService mExecutorService = Executors.newSingleThreadScheduledExecutor();
+    private ScheduledFuture<?> mScheduleFuture;
     private Handler mHandler = new Handler();
+    private Runnable updateSeekbarTask = new Runnable()
+    {
+        @Override
+        public void run()
+        {
+            //Check if the musicService is bound/connected
+            if (musicService!=null && bindFlag)
+            {
+                //Update progress bar and currentTime
+                int pos = musicService.getCurrentPos() / 1000;
+                npSeekbar.setProgress(pos);
+                String currentTime = toSeconds(pos);
+                npCurrentTime.setText(currentTime);
+            }
+        }
+    };
+
 
     /** OnCreate  */
     //*******************************************************
@@ -148,6 +170,7 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
 
         seekbarReceiver = new SeekbarBroadcastReceiver();
 
+        
     }//end-onCreate
 
     /** OnStart  */
@@ -178,6 +201,7 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
     @Override
     protected void onDestroy()
     {
+        mExecutorService.shutdown();
         musicService.setCallback(null);     //Unregister
         stopService(playIntent);
         unbindService(musicConnection);
@@ -198,6 +222,7 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
         {
             //setController();
             updateViews();
+            startSeekbarUpdater();
             paused = false;
         }
         LocalBroadcastManager.getInstance(this).registerReceiver((seekbarReceiver), new IntentFilter(MusicService.SEEKBAR_RESULT));
@@ -209,6 +234,7 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
     protected void onPause()
     {
         super.onPause();
+        stopSeekbarUpdater();
         paused = true;
         LocalBroadcastManager.getInstance(this).unregisterReceiver(seekbarReceiver);
     }//end
@@ -484,7 +510,7 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
 
     /** SeekbarBroadcastReceiver Class */
     //*******************************************************
-    private class SeekbarBroadcastReceiver implements BroadcastReceiver
+    private class SeekbarBroadcastReceiver extends BroadcastReceiver
     {
         @Override
         public void onReceive(Context context, Intent intent)
@@ -497,22 +523,8 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
             npSeekbar.setMax(seekBarMax);
             npMaxTime.setText(maxTime);
 
-            //Make sure you update Seekbar on UI thread
-            MainActivity.this.runOnUiThread(new Runnable()
-            {
-                @Override
-                public void run()
-                {
-                    if (musicService!=null && bindFlag)
-                    {
-                        int pos = musicService.getCurrentPos() / 1000;
-                        npSeekbar.setProgress(pos);
-                        String currentTime = toSeconds(pos);
-                        npCurrentTime.setText(currentTime);
-                    }
-                    mHandler.postDelayed(this, 1000);
-                }
-            });
+            //Update progress every second (on UI thread)
+            startSeekbarUpdater();
         }
     }//end-receiver
 
@@ -624,9 +636,7 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
             playbackPaused = false;
         }
         musicService.playSong();
-
         
-        //controller.show(0);
     }//end
 
     /** PlayNext */
@@ -698,22 +708,23 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
             public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser)
             {
                 progress = progresValue;
+                String currentTime = toSeconds(progress);
+                npCurrentTime.setText(currentTime);
 
-                if(musicService!=null && bindFlag && fromUser)
+                if(fromUser)
                 {
-                    musicService.seek(progress); 
-                }
-                else
-                {
-                 // the event was fired from code and you shouldn't call player.seekTo()
+                    musicService.seek(progress * 1000); 
                 }
             }
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
+            public void onStartTrackingTouch(SeekBar seekBar) 
+            {
+                stopSeekbarUpdater();
             }
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                Toast.makeText(getApplicationContext(), "Stopped at:" + progress, Toast.LENGTH_SHORT).show();
+            public void onStopTrackingTouch(SeekBar seekBar)
+            {
+                startSeekbarUpdater();
             }
         });//end-seekbar
 
@@ -729,12 +740,19 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
 
                 //IsPlaying
                 if (state)
+                {
+                    playbackPaused = false;
+                    //Start playing
                     musicService.go();
+                    Toast.makeText(getApplicationContext(), "Play button: StartSeekbarUpdater", Toast.LENGTH_SHORT).show();   
+                    startSeekbarUpdater();
+                }
                 //IsPaused
                 else
                 {
                     playbackPaused = true;
                     musicService.pausePlayer();
+                    stopSeekbarUpdater();
                 }
             }
         });//end
@@ -751,12 +769,19 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
                 
                 //IsPlaying
                 if (state)
+                {
+                    playbackPaused = false;
+                    //Start playing
                     musicService.go();
+                    Toast.makeText(getApplicationContext(), "Play button: StartSeekbarUpdater", Toast.LENGTH_SHORT).show();   
+                    startSeekbarUpdater();
+                }
                 //IsPaused
                 else
                 {
                     playbackPaused = true;
                     musicService.pausePlayer();
+                    stopSeekbarUpdater();
                 }
             }
         });//end
@@ -819,6 +844,35 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
         {
             cbPlayPauseButton.setChecked(musicService.isPlaying());
             npPlayPauseButton.setChecked(musicService.isPlaying());
+        }
+    }//end-updater
+
+    /** StartSeekbarUpdater */
+    //*******************************************************
+    private void startSeekbarUpdater()
+    {
+        stopSeekbarUpdater();    
+        if (!mExecutorService.isShutdown())
+        {
+            mScheduleFuture = mExecutorService.scheduleAtFixedRate(new Runnable() 
+            {
+                @Override
+                public void run()
+                {
+                    mHandler.post(updateSeekbarTask);
+                }
+            }, 100, 1000, TimeUnit.MILLISECONDS);
+        }
+
+    }//end-updater
+
+    /** StopSeekbarUpdater */
+    //*******************************************************
+    private void stopSeekbarUpdater() 
+    {
+        if (mScheduleFuture != null)
+        {
+            mScheduleFuture.cancel(false);
         }
     }//end-updater
 
