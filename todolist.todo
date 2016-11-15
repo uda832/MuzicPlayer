@@ -1,4 +1,4 @@
-//Completed
+Completed:
     + Set up Song class
     + Query songs
     + Populate ListView
@@ -71,13 +71,7 @@
                         + send
             + Add textView to show current and max song's duration
     + Refactor code
-
-//end-completed
-
-
-
-Next Commit:
-     + Updating SeekBar:
+    + Updating SeekBar:
         + Bugfix:
             + Issue: Seekbar dragging always made it reset to 0
             + Fix: musicService.seek(progress * 1000) inside onProgressChanged 
@@ -86,20 +80,45 @@ Next Commit:
             + startSeekbarUpdater
             + stopSeekbarUpdater
 
-Current Task:
-     
+//end-completed
 
-Next Task:
+
+
+NextCommit:
+    + NP MoreMenu on Bottom
+        + Set up views
+
+CurrentTask:
+
+TESTS:
+    - MoreMenu on NP should be:
+        - Visible
+        - Clickable
+        - Populated
+        
+
+NextTask:
+    - Now Playing SlidingPanel
+        - MoreMenu on Bottom
+            - Handle actions
+                - Go to Artist
+                - Go to Album
+                - Add to Playlist
+                - Settings
+    - Now Playing SlidingPanel
+        - Fav button (auto add to "Fav" playlist)
+        - Seekbar
+        - Current time, total-current time 
+        - Shuffle
+        - Prev, Play/pause, Next
                 
              
 
-
-    
+ 
 
 Bugs:
     - While paused, getting a message starts playing
     - Audio_focus temporary loss (i.e. message) breaks app
-    - Selecting a song while paused doesn't refresh play button
     + Inflate fail (onCreateView invoked only when viewPager is scrolled)
         * Issue: onCreateView is called before populateSongsList is called
 
@@ -107,23 +126,11 @@ Bugs:
 TESTS before deploying:
     - Analyze memory consumption (compared to other music players)
         - Look for room to optimize usage
-    - Analyze CPU usage (while visible, in the background)
+    - Analyze CPU usage (while visible vs. in the background)
 
 
 
-Future Tasks:
-    - Now Playing SlidingPanel
-        - LongClick on Image Popup/Context menu
-            - Go to Artist
-            - Go to Album
-            - Add to Playlist
-            - Settings
-        - Controls:
-            - Fav button (auto add to "Fav" playlist)
-            - Seekbar
-            - Current time, total-current time 
-            - Shuffle
-            - Prev, Play/pause, Next
+FutureTasks:
     - Animate hide when fragment is scrolled
     - Use headphone controllers
         - Defaults (pause/play, double-click to playNext, triple for prev etc.)

@@ -1,0 +1,21 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.ud4.muzicplayer.MainActivity">
+    <item
+        android:id="@+id/np_goto_artist"
+        android:title="Go to Artist"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/np_goto_album"
+        android:title="Go to Album"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/np_addto_playlist"
+        android:title="Add to Playlist"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/np_settings"
+        android:title="Settings"
+        app:showAsAction="never" />
+</menu>

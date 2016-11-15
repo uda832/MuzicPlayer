@@ -45,6 +45,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ListView;
 import android.widget.MediaController.MediaPlayerControl;
+import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.text.TextUtils;
 
 import android.os.Bundle;
@@ -76,7 +78,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState;
 //end-imports
 
-public class MainActivity extends AppCompatActivity implements ServiceCallback, Target
+public class MainActivity extends AppCompatActivity implements ServiceCallback, Target 
 {
     private static final int PERMISSIONS_EXTERNAL = 0;
     private ViewPager mViewPager;
@@ -104,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
     private TextView npCurrentTime;
     private TextView npMaxTime;
     private CheckBox npPlayPauseButton;
+    private ImageButton npMoreButton;
 
     private BlurTransformation blurTransformation;
     private Point backgroundSize;
@@ -112,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
     private final ScheduledExecutorService mExecutorService = Executors.newSingleThreadScheduledExecutor();
     private ScheduledFuture<?> mScheduleFuture;
     private Handler mHandler = new Handler();
-    private Runnable updateSeekbarTask = new Runnable()
+    private Runnable updateSeekbarTask = new Runnable()//*****
     {
         @Override
         public void run()
@@ -127,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
                 npCurrentTime.setText(currentTime);
             }
         }
-    };
+    };//end-runnable
 
 
     /** OnCreate  */
@@ -698,6 +701,7 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
         npCurrentTime = (TextView) npRoot.findViewById(R.id.np_current_time);
         npMaxTime = (TextView) npRoot.findViewById(R.id.np_max_time);
         npPlayPauseButton = (CheckBox) npRoot.findViewById(R.id.np_play_pause);
+        npMoreButton = (ImageButton) npRoot.findViewById(R.id.np_morebutton);
 
         //SeekBarChangeListener
         npSeekbar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() 
@@ -744,7 +748,6 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
                     playbackPaused = false;
                     //Start playing
                     musicService.go();
-                    Toast.makeText(getApplicationContext(), "Play button: StartSeekbarUpdater", Toast.LENGTH_SHORT).show();   
                     startSeekbarUpdater();
                 }
                 //IsPaused
@@ -773,7 +776,6 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
                     playbackPaused = false;
                     //Start playing
                     musicService.go();
-                    Toast.makeText(getApplicationContext(), "Play button: StartSeekbarUpdater", Toast.LENGTH_SHORT).show();   
                     startSeekbarUpdater();
                 }
                 //IsPaused
@@ -785,6 +787,38 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
                 }
             }
         });//end
+
+        //MoreMenu Listener for the NowPlayingPanel
+        npMoreButton.setOnClickListener(new View.OnClickListener()
+        {//*****
+            @Override
+            public void onClick(View view)
+            {
+                PopupMenu popup = new PopupMenu(MainActivity.this, view);
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener()//*****
+                {
+                    @Override 
+                    public boolean onMenuItemClick(MenuItem item)
+                    {
+                        switch (item.getItemId()) {
+                            case R.id.np_goto_artist:
+                                return true;
+                            case R.id.np_goto_album:
+                                return true;
+                            case R.id.np_addto_playlist:
+                                return true;
+                            case R.id.np_settings:
+                                return true;
+                            default:
+                                return false;
+                        }
+                    }
+                });//end-menu
+
+                popup.inflate(R.menu.np_menu);
+                popup.show();
+            }
+        });//end-more
 
     }//end
 
@@ -875,6 +909,7 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
             mScheduleFuture.cancel(false);
         }
     }//end-updater
+
 
 
     /** Convert toSeconds */
