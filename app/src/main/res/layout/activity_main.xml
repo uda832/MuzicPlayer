@@ -119,6 +119,7 @@
                     android:textColor="#FFFFFF"
                     />
             </RelativeLayout>
+            <!--NP Controllers-->
             <CheckBox
                 android:id="@+id/np_play_pause"
                 android:layout_below="@id/np_controller_root"
@@ -130,6 +131,7 @@
                 android:button="@drawable/play_pause"
                 app:layout_marginPercent="5%"
                 android:layout_centerHorizontal="true" />
+            <!--NP MoreButton-->
             <ImageButton
                 android:id="@+id/np_morebutton"
                 android:src="@drawable/ic_more_horizontal"
@@ -139,6 +141,19 @@
                 app:layout_marginPercent="2%"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true" />
+            <!--NP Fav Button-->
+            <CheckBox
+                android:id="@+id/np_fav"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleX="0.8"
+                android:scaleY="0.8"
+                android:background="@android:color/transparent"
+                android:button="@drawable/fav"
+                app:layout_marginPercent="2%"
+                app:layout_marginRightPercent="3%"
+                android:layout_alignParentBottom="true"
+                android:layout_toLeftOf="@id/np_morebutton" />
 
         </android.support.percent.PercentRelativeLayout>
 

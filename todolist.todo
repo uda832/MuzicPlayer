@@ -85,55 +85,10 @@ Completed:
 
 
 NextCommit:
-    + NP MoreMenu on Bottom
-        + Set up views
+    + Setup Fav button
+
 
 CurrentTask:
-
-TESTS:
-    - MoreMenu on NP should be:
-        - Visible
-        - Clickable
-        - Populated
-        
-
-NextTask:
-    - Now Playing SlidingPanel
-        - MoreMenu on Bottom
-            - Handle actions
-                - Go to Artist
-                - Go to Album
-                - Add to Playlist
-                - Settings
-    - Now Playing SlidingPanel
-        - Fav button (auto add to "Fav" playlist)
-        - Seekbar
-        - Current time, total-current time 
-        - Shuffle
-        - Prev, Play/pause, Next
-                
-             
-
- 
-
-Bugs:
-    - While paused, getting a message starts playing
-    - Audio_focus temporary loss (i.e. message) breaks app
-    + Inflate fail (onCreateView invoked only when viewPager is scrolled)
-        * Issue: onCreateView is called before populateSongsList is called
-
-
-TESTS before deploying:
-    - Analyze memory consumption (compared to other music players)
-        - Look for room to optimize usage
-    - Analyze CPU usage (while visible vs. in the background)
-
-
-
-FutureTasks:
-    - Animate hide when fragment is scrolled
-    - Use headphone controllers
-        - Defaults (pause/play, double-click to playNext, triple for prev etc.)
     - Set up Fragments:
         - Songs
             + ListView item:
@@ -162,6 +117,41 @@ FutureTasks:
                         - ontouch to expand/collapse
                         - tracks ListView
         - Playlists
+
+NextTask:
+    - Now Playing SlidingPanel
+        - Fav button Functionality
+                - auto add to "Favourites" playlist
+                - Adapter.getView: check if it exists in "Favourites" playlist
+        - Prev, Play/pause, Next
+        - Shuffle Button
+    - Make panel draggable only on "Metadata", and "ControllerBar" section
+ 
+
+Bugs:
+    - While paused, getting a message starts playing
+    - Audio_focus temporary loss (i.e. message) breaks app
+    + Inflate fail (onCreateView invoked only when viewPager is scrolled)
+        * Issue: onCreateView is called before populateSongsList is called
+
+
+TESTS before deploying:
+    - Analyze memory consumption (compared to other music players)
+        - Look for room to optimize usage
+    - Analyze CPU usage (while visible vs. in the background)
+
+
+
+FutureTasks:
+    - Now Playing SlidingPanel
+        - MoreMenu -- Handle actions
+                - Go to Artist
+                - Go to Album
+                - Add to Playlist
+                - Settings
+    - Animate hide when fragment is scrolled
+    - Use headphone controllers
+        - Defaults (pause/play, double-click to playNext, triple for prev etc.)
     - SongAdapter:
         - Need to grab images (leave artwork for now)
     * Contextual Action Menu
