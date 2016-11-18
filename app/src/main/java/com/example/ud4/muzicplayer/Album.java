@@ -4,20 +4,18 @@ import android.net.Uri;
 import android.content.ContentUris;
 
 
-public class Song implements TitleInterface
+public class Album implements TitleInterface
 {
     private long mId;
     private String mTitle;
     private String mArtist;
-    private long mAlbumId;
 
     //Constructor
-    public Song(long id, String title, String artist, long albumId)
+    public Album(long id, String title, String artist)
     {
         mId = id;
         mTitle = title;
         mArtist = artist;
-        mAlbumId = albumId;
     }
     
     //Methods
@@ -29,7 +27,6 @@ public class Song implements TitleInterface
     @Override
     public String getTitle()
     {
-
         return mTitle;
     }
 
@@ -38,15 +35,10 @@ public class Song implements TitleInterface
         return mArtist;
     }
 
-    public long getAlbumId()
-    {
-        return mAlbumId;
-    }
-
     public Uri getAlbumArtUri()
     {
         //Return URI of album art using album ID
         Uri uri = Uri.parse("content://media/external/audio/albumart");
-        return ContentUris.withAppendedId(uri, mAlbumId);
+        return ContentUris.withAppendedId(uri, mId);
     }
 }//end-class

@@ -79,34 +79,47 @@ Completed:
         + Stop the seekbarUpdater when playback is paused and resume once isPlaying
             + startSeekbarUpdater
             + stopSeekbarUpdater
+    + Setup Fav button
 
 //end-completed
 
 
-
 NextCommit:
-    + Setup Fav button
+    + OnSongClick:
+        + Expand NPpanel
+    + Setup Album view
+        + Create album.xml
+        + onCreateView for album
+        + Album, AlbumAdapter classes
+        + query and populate methods for albums
 
 
 CurrentTask:
+**********************************************************************
     - Set up Fragments:
-        - Songs
-            + ListView item:
-                + Artwork
-                + Song name
-                + Artist Name
-            - LongClick for contextual action mode (CheckBox)
-                - Menu:
-                    - Add to playlist
-                    - Settings
         - Albums
-            - GridView
-                - Artwork
-                - Album name
-                - Artist
-            - Single Album:
+            - OnItemClick for albums
+
+    Bugs:
+        - Empty albums and songs should have placeholder
+
+
+
+
+
+            - Album Fragment:
                 - 1/3 Screen with art, name, artist, year, total duration
                 - ListView Tracks (trackNum, TrackName, duration)
+
+   
+//end**********************************************************************
+
+NextTask:
+    - Set up Fragments:
+        - Songs
+            - LongClick for contextual action mode (CheckBox)
+                - Menu:
+                    - Add selected songs to playlist
         - Artists:
             - ListView Item:
                 - first album artwork, artistName, numTracks 
@@ -117,8 +130,6 @@ CurrentTask:
                         - ontouch to expand/collapse
                         - tracks ListView
         - Playlists
-
-NextTask:
     - Now Playing SlidingPanel
         - Fav button Functionality
                 - auto add to "Favourites" playlist
@@ -157,7 +168,6 @@ FutureTasks:
     * Contextual Action Menu
         * Add to playlist
     * Alphabetical Scroll Bar
-
 
 
 Possible Features:
