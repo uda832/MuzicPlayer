@@ -22,15 +22,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/AppTheme.AppBarOverlay"
-            android:background="#80000000"
-            >
-
+            android:background="#80000000">
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:popupTheme="@style/AppTheme.PopupOverlay">
-
             </android.support.v7.widget.Toolbar>
 
             <android.support.design.widget.TabLayout
@@ -40,6 +37,7 @@
 
         </android.support.design.widget.AppBarLayout>
 
+        <!--Tab Container-->
         <android.support.v4.view.ViewPager
             android:id="@+id/container"
             android:layout_width="match_parent"
@@ -49,7 +47,7 @@
     </android.support.design.widget.CoordinatorLayout>
 
     <!-- SlideView -->
-    <RelativeLayout
+    <android.support.percent.PercentRelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -161,7 +159,7 @@
         <RelativeLayout
             android:id="@+id/controller_bar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            app:layout_heightPercent="10%"
             android:layout_alignParentTop="true"
             android:background="@drawable/border">
             <ImageView
@@ -204,6 +202,6 @@
                     android:textColor="#FFFFFF" />
             </LinearLayout>
         </RelativeLayout>
-    </RelativeLayout>
+    </android.support.percent.PercentRelativeLayout>
 
 </com.sothree.slidinguppanel.SlidingUpPanelLayout>

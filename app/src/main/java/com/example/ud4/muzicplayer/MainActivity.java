@@ -49,6 +49,7 @@ import android.widget.MediaController.MediaPlayerControl;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.text.TextUtils;
+import android.support.v4.app.DialogFragment;
 
 import android.os.Bundle;
 import android.os.IBinder;
@@ -326,6 +327,44 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
 
 
 
+
+    /** SectionsPagerAdapter Class */
+    //*******************************************************
+    public class SectionsPagerAdapter extends FragmentPagerAdapter
+    {
+        public SectionsPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            // getItem is called to instantiate the fragment for the given page.
+            // Return a TabFragment (defined as a static inner class below).
+            return TabFragment.newInstance(getPageTitle(position).toString());
+        }
+
+        @Override
+        public int getCount() {
+            // Show 3 total pages.
+            return 4;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
+                case 0:
+                    return "songs";
+                case 1:
+                    return "albums";
+                case 2:
+                    return "artists";
+                case 3:
+                    return "playlists";
+            }
+            return null;
+        }
+    }//end-PagerAdapter
+
     /** TabFragment Class.  */
     //*******************************************************
     public static class TabFragment extends Fragment
@@ -377,14 +416,14 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
 
                     //Set Adapter
                     listView.setAdapter(songsAdapter);
-                    listView.setOnItemClickListener(new ListView.OnItemClickListener()
+                    listView.setOnItemClickListener(new ListView.OnItemClickListener()//******
                     {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id)
                         {
                             ((MainActivity) getActivity()).songOnClick(position);
                         }
-                    });
+                    });//end-Listener
                     songsAdapter.notifyDataSetChanged();
                     break;
                 }
@@ -396,14 +435,16 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
 
                     //Set Adapter
                     gridView.setAdapter(albumsAdapter);
-                    gridView.setOnItemClickListener(new GridView.OnItemClickListener()
+                    gridView.setOnItemClickListener(new GridView.OnItemClickListener()//*****
                     {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id)
                         {
-                            ((MainActivity) getActivity()).albumOnClick(position);
+                            //IMPLEMENT ME:
+                                * Wrap viewpager inside fragment
+                                * Replace viewpager fragment with AlbumFragment
                         }
-                    });
+                    });//end-Listener
                     songsAdapter.notifyDataSetChanged();
                     break;
                 }
@@ -426,42 +467,6 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
 
     }//end-fragmentClass
 
-    /** SectionsPagerAdapter Class */
-    //*******************************************************
-    public class SectionsPagerAdapter extends FragmentPagerAdapter
-    {
-        public SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a TabFragment (defined as a static inner class below).
-            return TabFragment.newInstance(getPageTitle(position).toString());
-        }
-
-        @Override
-        public int getCount() {
-            // Show 3 total pages.
-            return 4;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return "songs";
-                case 1:
-                    return "albums";
-                case 2:
-                    return "artists";
-                case 3:
-                    return "playlists";
-            }
-            return null;
-        }
-    }//end-PagerAdapter
 
     /** NoisyAudio Class */
     //*******************************************************
@@ -691,7 +696,9 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
     //*******************************************************
     public void albumOnClick(int position)
     {
-        //Open full-screen fragment
+        //FragmentManager fm = getSupportFragmentManager();
+        //AlbumFragment dialogFragment = new AlbumFragment();
+        //dialogFragment.show(fm, "Sample Fragment");
     }//end
 
     /** PlayNext */

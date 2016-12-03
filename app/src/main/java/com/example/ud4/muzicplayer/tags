@@ -7,6 +7,7 @@
 ARG_SECTION_NAME	MainActivity.java	/^        private static final String ARG_SECTION_NAME = "section_name";$/;"	f	class:MainActivity.TabFragment	file:
 Album	Album.java	/^    public Album(long id, String title, String artist)$/;"	m	class:Album
 Album	Album.java	/^public class Album implements TitleInterface$/;"	c
+AlbumFragment	AlbumFragment.java	/^public class AlbumFragment extends DialogFragment$/;"	c
 AlbumsAdapter	AlbumsAdapter.java	/^    public AlbumsAdapter(Context context, ArrayList<Album> list)$/;"	m	class:AlbumsAdapter
 AlbumsAdapter	AlbumsAdapter.java	/^public class AlbumsAdapter extends ArrayAdapter<Album>$/;"	c
 BlurTransformation	BlurTransformation.java	/^    public BlurTransformation(Context context, float radius) {$/;"	m	class:BlurTransformation
@@ -66,6 +67,7 @@ cbPlayPauseButton	MainActivity.java	/^    private CheckBox cbPlayPauseButton;$/;
 cbRoot	MainActivity.java	/^    private RelativeLayout cbRoot;$/;"	f	class:MainActivity	file:
 cbTitle	MainActivity.java	/^    private TextView cbTitle;$/;"	f	class:MainActivity	file:
 com.example.ud4.muzicplayer	Album.java	/^package com.example.ud4.muzicplayer;$/;"	p
+com.example.ud4.muzicplayer	AlbumFragment.java	/^package com.example.ud4.muzicplayer;$/;"	p
 com.example.ud4.muzicplayer	AlbumsAdapter.java	/^package com.example.ud4.muzicplayer;$/;"	p
 com.example.ud4.muzicplayer	BlurTransformation.java	/^package com.example.ud4.muzicplayer;$/;"	p
 com.example.ud4.muzicplayer	CustomControllerView.java	/^package com.example.ud4.muzicplayer;$/;"	p
@@ -191,7 +193,9 @@ onBitmapLoaded	MainActivity.java	/^    public void onBitmapLoaded(Bitmap bitmap,
 onCompletion	MusicService.java	/^	public void onCompletion(MediaPlayer mp)$/;"	m	class:MusicService
 onCreate	MainActivity.java	/^    protected void onCreate(Bundle savedInstanceState) $/;"	m	class:MainActivity
 onCreate	MusicService.java	/^    public void onCreate()$/;"	m	class:MusicService
+onCreateDialog	AlbumFragment.java	/^    public Dialog onCreateDialog(Bundle savedInstanceState)$/;"	m	class:AlbumFragment
 onCreateOptionsMenu	MainActivity.java	/^    public boolean onCreateOptionsMenu(Menu menu) {$/;"	m	class:MainActivity
+onCreateView	AlbumFragment.java	/^    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)$/;"	m	class:AlbumFragment
 onCreateView	MainActivity.java	/^        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)$/;"	m	class:MainActivity.TabFragment
 onDestroy	MainActivity.java	/^    protected void onDestroy()$/;"	m	class:MainActivity
 onDestroy	MusicService.java	/^    public void onDestroy()$/;"	m	class:MusicService
@@ -209,6 +213,7 @@ onReceive	MainActivity.java	/^        public void onReceive(Context context, Int
 onReceive	MainActivity.java	/^        public void onReceive(Context context, Intent intent)$/;"	m	class:MainActivity.SeekbarBroadcastReceiver
 onRequestPermissionsResult	MainActivity.java	/^    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults)$/;"	m	class:MainActivity
 onResume	MainActivity.java	/^    protected void onResume()$/;"	m	class:MainActivity
+onStart	AlbumFragment.java	/^    public void onStart() {$/;"	m	class:AlbumFragment
 onStart	MainActivity.java	/^    protected void onStart()$/;"	m	class:MainActivity
 onStop	MainActivity.java	/^    protected void onStop()$/;"	m	class:MainActivity
 onTouchEvent	CustomControllerView.java	/^    public boolean onTouchEvent(MotionEvent event) {$/;"	m	class:VideoControllerView
