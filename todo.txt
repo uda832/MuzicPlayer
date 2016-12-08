@@ -96,25 +96,22 @@ NextCommit:
 
 CurrentTask:
 **********************************************************************
+    - Major Design Update:
+        + fragment_host.xml
+            + Wrap viewpager + tablayout inside a Fragment
+            + Replace viewpager with framelayout activity_main
+
+        - Implement HostFragment.java
+        - Modify MainActivity.java
+
+
     - Set up Fragments:
         - Albums
             - Albums.OnItemClick behavior
                 - Replace ViewPager fragment with Album fragment 
 
-    - Major Design Update:
-        - Wrap viewpager inside a Fragment
-        - When albumView/artistView item is clicked, replace whole thing
-
-        * Reasons:
-            - Cannot open new activity -- which will lose slidingPanel/bar
-            - Cannot use dialogFragment -- which fails to become fullscreen
 
 
-
-
-            - AlbumContainer
-            - Albums.OnItemClick 
-                - Replace this with a fragment
 
 
 
