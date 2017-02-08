@@ -87,22 +87,32 @@ Completed:
         + onCreateView for album
         + Album, AlbumAdapter classes
         + query and populate methods for albums
-
+    + fragment_host.xml
+        + Wrap viewpager + tablayout inside a Fragment
+        + Replace viewpager with framelayout activity_main
 //end-completed
 
 
 NextCommit:
-    + Replace unfaved.png with white one
+
+
 
 CurrentTask:
 **********************************************************************
     - Major Design Update:
-        + fragment_host.xml
-            + Wrap viewpager + tablayout inside a Fragment
-            + Replace viewpager with framelayout activity_main
+        + Implement HostFragment class
+        + Modify MainActivity.java
 
-        - Implement HostFragment.java
-        - Modify MainActivity.java
+        TESTS:
+            - Compiling?
+            - ViewPager + TabLayout loaded?
+
+
+
+
+
+    - Bugfix: audioFocusGain starts playing (even when playback is paused)
+
 
 
     - Set up Fragments:

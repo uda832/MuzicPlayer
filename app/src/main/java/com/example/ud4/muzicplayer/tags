@@ -13,6 +13,8 @@ AlbumsAdapter	AlbumsAdapter.java	/^public class AlbumsAdapter extends ArrayAdapt
 BlurTransformation	BlurTransformation.java	/^    public BlurTransformation(Context context, float radius) {$/;"	m	class:BlurTransformation
 BlurTransformation	BlurTransformation.java	/^public class BlurTransformation implements Transformation {$/;"	c
 FADE_OUT	CustomControllerView.java	/^    private static final int    FADE_OUT = 1;$/;"	f	class:VideoControllerView	file:
+HostFragment	MainActivity.java	/^        public HostFragment()$/;"	m	class:MainActivity.HostFragment
+HostFragment	MainActivity.java	/^    public class HostFragment extends Fragment$/;"	c	class:MainActivity
 MainActivity	MainActivity.java	/^public class MainActivity extends AppCompatActivity implements ServiceCallback, Target $/;"	c
 MediaPlayerControl	CustomControllerView.java	/^    public interface MediaPlayerControl {$/;"	i	class:VideoControllerView
 MessageHandler	CustomControllerView.java	/^        MessageHandler(VideoControllerView view) {$/;"	m	class:VideoControllerView.MessageHandler
@@ -191,11 +193,13 @@ onBind	MusicService.java	/^    public IBinder onBind(Intent arg0)$/;"	m	class:Mu
 onBitmapFailed	MainActivity.java	/^    public void onBitmapFailed(Drawable drawable) {$/;"	m	class:MainActivity
 onBitmapLoaded	MainActivity.java	/^    public void onBitmapLoaded(Bitmap bitmap, LoadedFrom from) {$/;"	m	class:MainActivity
 onCompletion	MusicService.java	/^	public void onCompletion(MediaPlayer mp)$/;"	m	class:MusicService
+onCreate	MainActivity.java	/^        public void onCreate(Bundle savedInstanceState) {$/;"	m	class:MainActivity.HostFragment
 onCreate	MainActivity.java	/^    protected void onCreate(Bundle savedInstanceState) $/;"	m	class:MainActivity
 onCreate	MusicService.java	/^    public void onCreate()$/;"	m	class:MusicService
 onCreateDialog	AlbumFragment.java	/^    public Dialog onCreateDialog(Bundle savedInstanceState)$/;"	m	class:AlbumFragment
 onCreateOptionsMenu	MainActivity.java	/^    public boolean onCreateOptionsMenu(Menu menu) {$/;"	m	class:MainActivity
 onCreateView	AlbumFragment.java	/^    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)$/;"	m	class:AlbumFragment
+onCreateView	MainActivity.java	/^        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {$/;"	m	class:MainActivity.HostFragment
 onCreateView	MainActivity.java	/^        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)$/;"	m	class:MainActivity.TabFragment
 onDestroy	MainActivity.java	/^    protected void onDestroy()$/;"	m	class:MainActivity
 onDestroy	MusicService.java	/^    public void onDestroy()$/;"	m	class:MusicService
@@ -212,6 +216,7 @@ onPrepared	MusicService.java	/^    public void onPrepared(MediaPlayer mp)$/;"	m	
 onReceive	MainActivity.java	/^        public void onReceive(Context context, Intent intent)$/;"	m	class:MainActivity.NoisyAudioStreamReceiver
 onReceive	MainActivity.java	/^        public void onReceive(Context context, Intent intent)$/;"	m	class:MainActivity.SeekbarBroadcastReceiver
 onRequestPermissionsResult	MainActivity.java	/^    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults)$/;"	m	class:MainActivity
+onResume	MainActivity.java	/^        public void onResume() $/;"	m	class:MainActivity.HostFragment
 onResume	MainActivity.java	/^    protected void onResume()$/;"	m	class:MainActivity
 onStart	AlbumFragment.java	/^    public void onStart() {$/;"	m	class:AlbumFragment
 onStart	MainActivity.java	/^    protected void onStart()$/;"	m	class:MainActivity

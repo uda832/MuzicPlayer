@@ -153,12 +153,10 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //Set up Sections with fragments (Songs, Albums, etc.)
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        mViewPager = (ViewPager) findViewById(R.id.view_pager);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(mViewPager);
+        //HostFragment 
+        Fragment hostFragment = new HostFragment();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.frag_holder, hostFragment).addToBackStack(null).commit();
 
         blurTransformation = new BlurTransformation(this, 25F);
         backgroundSize = calcBackgroundSize(getWindowManager().getDefaultDisplay());
@@ -176,8 +174,6 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
         rootLayout.addPanelSlideListener(new MyPanelSlideListener());
 
         seekbarReceiver = new SeekbarBroadcastReceiver();
-
-        
     }//end-onCreate
     /** OnStart  */
     //*******************************************************
@@ -328,6 +324,39 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
 
 
 
+    /** HostFragment Class */
+    //*******************************************************
+    public class HostFragment extends Fragment
+    {
+        public HostFragment()
+        {
+        }
+
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            // Inflate the layout for this fragment
+            return inflater.inflate(R.layout.fragment_host, container, false);
+        }
+
+        @Override
+        public void onResume() 
+        {
+            super.onResume();
+            ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
+            SectionsPagerAdapter pagerAdapter = new SectionsPagerAdapter(getChildFragmentManager());
+
+            TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+
+            viewPager.setAdapter(pagerAdapter);
+            tabLayout.setupWithViewPager(viewPager);
+        }
+    }//end-class
+
     /** SectionsPagerAdapter Class */
     //*******************************************************
     public class SectionsPagerAdapter extends FragmentPagerAdapter
@@ -364,7 +393,6 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
             return null;
         }
     }//end-PagerAdapter
-
     /** TabFragment Class.  */
     //*******************************************************
     public static class TabFragment extends Fragment
