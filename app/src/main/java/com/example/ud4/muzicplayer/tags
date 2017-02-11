@@ -8,13 +8,15 @@ ARG_SECTION_NAME	MainActivity.java	/^        private static final String ARG_SEC
 Album	Album.java	/^    public Album(long id, String title, String artist)$/;"	m	class:Album
 Album	Album.java	/^public class Album implements TitleInterface$/;"	c
 AlbumFragment	AlbumFragment.java	/^public class AlbumFragment extends DialogFragment$/;"	c
+AlbumFragment	MainActivity.java	/^        public AlbumFragment()$/;"	m	class:MainActivity.AlbumFragment
+AlbumFragment	MainActivity.java	/^    public static class AlbumFragment extends Fragment$/;"	c	class:MainActivity
 AlbumsAdapter	AlbumsAdapter.java	/^    public AlbumsAdapter(Context context, ArrayList<Album> list)$/;"	m	class:AlbumsAdapter
 AlbumsAdapter	AlbumsAdapter.java	/^public class AlbumsAdapter extends ArrayAdapter<Album>$/;"	c
 BlurTransformation	BlurTransformation.java	/^    public BlurTransformation(Context context, float radius) {$/;"	m	class:BlurTransformation
 BlurTransformation	BlurTransformation.java	/^public class BlurTransformation implements Transformation {$/;"	c
 FADE_OUT	CustomControllerView.java	/^    private static final int    FADE_OUT = 1;$/;"	f	class:VideoControllerView	file:
-HostFragment	MainActivity.java	/^        public HostFragment()$/;"	m	class:MainActivity.HostFragment
-HostFragment	MainActivity.java	/^    public class HostFragment extends Fragment$/;"	c	class:MainActivity
+HostFragment	HostFragment.java	/^    public HostFragment()$/;"	m	class:HostFragment
+HostFragment	HostFragment.java	/^public class HostFragment extends Fragment$/;"	c
 MainActivity	MainActivity.java	/^public class MainActivity extends AppCompatActivity implements ServiceCallback, Target $/;"	c
 MediaPlayerControl	CustomControllerView.java	/^    public interface MediaPlayerControl {$/;"	i	class:VideoControllerView
 MessageHandler	CustomControllerView.java	/^        MessageHandler(VideoControllerView view) {$/;"	m	class:VideoControllerView.MessageHandler
@@ -31,7 +33,7 @@ SEEKBAR_MAX	MusicService.java	/^    public static final String SEEKBAR_MAX = "co
 SEEKBAR_RESULT	MusicService.java	/^    public static final String SEEKBAR_RESULT = "com.example.ud4.muzicplayer.SEEKBAR_RES";$/;"	f	class:MusicService
 SHOW_PROGRESS	CustomControllerView.java	/^    private static final int    SHOW_PROGRESS = 2;$/;"	f	class:VideoControllerView	file:
 SectionsPagerAdapter	MainActivity.java	/^        public SectionsPagerAdapter(FragmentManager fm) {$/;"	m	class:MainActivity.SectionsPagerAdapter
-SectionsPagerAdapter	MainActivity.java	/^    public class SectionsPagerAdapter extends FragmentPagerAdapter$/;"	c	class:MainActivity
+SectionsPagerAdapter	MainActivity.java	/^    public static class SectionsPagerAdapter extends FragmentPagerAdapter$/;"	c	class:MainActivity
 SeekbarBroadcastReceiver	MainActivity.java	/^    private class SeekbarBroadcastReceiver extends BroadcastReceiver$/;"	c	class:MainActivity
 ServiceCallback	ServiceCallback.java	/^public interface ServiceCallback$/;"	i
 Song	Song.java	/^    public Song(long id, String title, String artist, long albumId)$/;"	m	class:Song
@@ -73,6 +75,7 @@ com.example.ud4.muzicplayer	AlbumFragment.java	/^package com.example.ud4.muzicpl
 com.example.ud4.muzicplayer	AlbumsAdapter.java	/^package com.example.ud4.muzicplayer;$/;"	p
 com.example.ud4.muzicplayer	BlurTransformation.java	/^package com.example.ud4.muzicplayer;$/;"	p
 com.example.ud4.muzicplayer	CustomControllerView.java	/^package com.example.ud4.muzicplayer;$/;"	p
+com.example.ud4.muzicplayer	HostFragment.java	/^package com.example.ud4.muzicplayer;$/;"	p
 com.example.ud4.muzicplayer	MainActivity.java	/^package com.example.ud4.muzicplayer;$/;"	p
 com.example.ud4.muzicplayer	MusicController.java	/^package com.example.ud4.muzicplayer;$/;"	p
 com.example.ud4.muzicplayer	MusicService.java	/^package com.example.ud4.muzicplayer;$/;"	p
@@ -193,14 +196,15 @@ onBind	MusicService.java	/^    public IBinder onBind(Intent arg0)$/;"	m	class:Mu
 onBitmapFailed	MainActivity.java	/^    public void onBitmapFailed(Drawable drawable) {$/;"	m	class:MainActivity
 onBitmapLoaded	MainActivity.java	/^    public void onBitmapLoaded(Bitmap bitmap, LoadedFrom from) {$/;"	m	class:MainActivity
 onCompletion	MusicService.java	/^	public void onCompletion(MediaPlayer mp)$/;"	m	class:MusicService
-onCreate	MainActivity.java	/^        public void onCreate(Bundle savedInstanceState) {$/;"	m	class:MainActivity.HostFragment
+onCreate	HostFragment.java	/^    public void onCreate(Bundle savedInstanceState) {$/;"	m	class:HostFragment
 onCreate	MainActivity.java	/^    protected void onCreate(Bundle savedInstanceState) $/;"	m	class:MainActivity
 onCreate	MusicService.java	/^    public void onCreate()$/;"	m	class:MusicService
 onCreateDialog	AlbumFragment.java	/^    public Dialog onCreateDialog(Bundle savedInstanceState)$/;"	m	class:AlbumFragment
 onCreateOptionsMenu	MainActivity.java	/^    public boolean onCreateOptionsMenu(Menu menu) {$/;"	m	class:MainActivity
 onCreateView	AlbumFragment.java	/^    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)$/;"	m	class:AlbumFragment
-onCreateView	MainActivity.java	/^        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {$/;"	m	class:MainActivity.HostFragment
+onCreateView	HostFragment.java	/^    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {$/;"	m	class:HostFragment
 onCreateView	MainActivity.java	/^        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)$/;"	m	class:MainActivity.TabFragment
+onCreateView	MainActivity.java	/^        public View onCreateView(LayoutInflater inflater, ViewGroup container,$/;"	m	class:MainActivity.AlbumFragment
 onDestroy	MainActivity.java	/^    protected void onDestroy()$/;"	m	class:MainActivity
 onDestroy	MusicService.java	/^    public void onDestroy()$/;"	m	class:MusicService
 onError	MusicService.java	/^	public boolean onError(MediaPlayer mp, int what, int extra)$/;"	m	class:MusicService
@@ -216,7 +220,7 @@ onPrepared	MusicService.java	/^    public void onPrepared(MediaPlayer mp)$/;"	m	
 onReceive	MainActivity.java	/^        public void onReceive(Context context, Intent intent)$/;"	m	class:MainActivity.NoisyAudioStreamReceiver
 onReceive	MainActivity.java	/^        public void onReceive(Context context, Intent intent)$/;"	m	class:MainActivity.SeekbarBroadcastReceiver
 onRequestPermissionsResult	MainActivity.java	/^    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults)$/;"	m	class:MainActivity
-onResume	MainActivity.java	/^        public void onResume() $/;"	m	class:MainActivity.HostFragment
+onResume	HostFragment.java	/^    public void onResume() $/;"	m	class:HostFragment
 onResume	MainActivity.java	/^    protected void onResume()$/;"	m	class:MainActivity
 onStart	AlbumFragment.java	/^    public void onStart() {$/;"	m	class:AlbumFragment
 onStart	MainActivity.java	/^    protected void onStart()$/;"	m	class:MainActivity

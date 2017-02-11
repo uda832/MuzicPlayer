@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v4.content.ContextCompat;
 import android.support.percent.PercentRelativeLayout;
@@ -82,6 +83,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState;
 
 public class MainActivity extends AppCompatActivity implements ServiceCallback, Target 
 {
+    //Variables////*****
     private static final int PERMISSIONS_EXTERNAL = 0;
     private ViewPager mViewPager;
     private SectionsPagerAdapter mSectionsPagerAdapter;
@@ -133,8 +135,7 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
                 npCurrentTime.setText(currentTime);
             }
         }
-    };//end-runnable
-
+    };//end-runnable////end
 
     /** OnCreate  */
     //*******************************************************
@@ -321,45 +322,9 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
         }
     }//end-permission
 
-
-
-
-    /** HostFragment Class */
-    //*******************************************************
-    public class HostFragment extends Fragment
-    {
-        public HostFragment()
-        {
-        }
-
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            // Inflate the layout for this fragment
-            return inflater.inflate(R.layout.fragment_host, container, false);
-        }
-
-        @Override
-        public void onResume() 
-        {
-            super.onResume();
-            ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
-            SectionsPagerAdapter pagerAdapter = new SectionsPagerAdapter(getChildFragmentManager());
-
-            TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-
-            viewPager.setAdapter(pagerAdapter);
-            tabLayout.setupWithViewPager(viewPager);
-        }
-    }//end-class
-
     /** SectionsPagerAdapter Class */
     //*******************************************************
-    public class SectionsPagerAdapter extends FragmentPagerAdapter
+    public static class SectionsPagerAdapter extends FragmentPagerAdapter
     {
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -393,6 +358,7 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
             return null;
         }
     }//end-PagerAdapter
+
     /** TabFragment Class.  */
     //*******************************************************
     public static class TabFragment extends Fragment
@@ -465,12 +431,11 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
                     gridView.setAdapter(albumsAdapter);
                     gridView.setOnItemClickListener(new GridView.OnItemClickListener()//*****
                     {
+                        //Replace with fragment_album
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id)
                         {
-                            //IMPLEMENT ME:
-                                * Wrap viewpager inside fragment
-                                * Replace viewpager fragment with AlbumFragment
+                            ((MainActivity) getActivity()).albumOnClick(position);
                         }
                     });//end-Listener
                     songsAdapter.notifyDataSetChanged();
@@ -495,6 +460,21 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
 
     }//end-fragmentClass
 
+    /** AlbumFragment Class.  */
+    //*******************************************************
+    public static class AlbumFragment extends Fragment
+    {
+        public AlbumFragment()
+        {}
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.fragment_album, container, false);
+            return rootView;
+        }
+
+    }//end
 
     /** NoisyAudio Class */
     //*******************************************************
@@ -720,13 +700,23 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
         musicService.playSong();
         rootLayout.setPanelState(PanelState.EXPANDED);
     }//end
+
     /** AlbumOnClick */
     //*******************************************************
     public void albumOnClick(int position)
     {
-        //FragmentManager fm = getSupportFragmentManager();
-        //AlbumFragment dialogFragment = new AlbumFragment();
-        //dialogFragment.show(fm, "Sample Fragment");
+        //1. Replace frag with AlbumFragment
+        //
+        // Begin the transaction////*****
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        // Replace the contents of the container with the new fragment
+        ft.replace(R.id.frag_holder, new AlbumFragment()).addToBackStack(null);
+        // or ft.add(R.id.your_placeholder, new FooFragment());
+        // Complete the changes added above
+        ft.commit();//end
+
+        //2. Populate correct views
+
     }//end
 
     /** PlayNext */

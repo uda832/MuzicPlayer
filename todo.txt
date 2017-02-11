@@ -94,18 +94,17 @@ Completed:
 
 
 NextCommit:
+    +  Feat/frag update:
+        + Finish/fix-bugs related to HostFragment 
+    
+    + Albums.OnItemClick behavior
+        + Replace ViewPager fragment with Album fragment 
 
 
 
 CurrentTask:
 **********************************************************************
-    - Major Design Update:
-        + Implement HostFragment class
-        + Modify MainActivity.java
 
-        TESTS:
-            - Compiling?
-            - ViewPager + TabLayout loaded?
 
 
 
@@ -116,9 +115,6 @@ CurrentTask:
 
 
     - Set up Fragments:
-        - Albums
-            - Albums.OnItemClick behavior
-                - Replace ViewPager fragment with Album fragment 
 
 
 
@@ -141,6 +137,7 @@ NextTask:
     - Mods:
         - Empty albums and songs should have placeholder artwork
 
+    - Controller Bar Top line should show current seek time
 
     - Set up Fragments:
         - Songs
