@@ -92,6 +92,7 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
 
     private MusicService musicService;
     private Intent playIntent;
+    private Album currentAlbum;
     private boolean bindFlag;
     private boolean paused = false;
     private boolean playbackPaused = false;
@@ -151,8 +152,8 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
         getPermission();
 
         //Setup toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //setSupportActionBar(toolbar);
 
         //HostFragment 
         Fragment hostFragment = new HostFragment();
@@ -176,6 +177,7 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
 
         seekbarReceiver = new SeekbarBroadcastReceiver();
     }//end-onCreate
+
     /** OnStart  */
     //*******************************************************
     @Override
@@ -189,6 +191,7 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
             startService(playIntent);
         }
     }//end-onstart
+
     /** OnStop  */
     //*******************************************************
     @Override
@@ -197,6 +200,7 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
         //controller.hide();
         super.onStop();
     }//end
+
     /** OnDestroy  */
     //*******************************************************
     @Override
@@ -211,6 +215,7 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
         musicService = null;
         super.onDestroy();
     }//end
+
     /** OnResume  */
     //*******************************************************
     @Override
@@ -227,6 +232,7 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
         }
         LocalBroadcastManager.getInstance(this).registerReceiver((seekbarReceiver), new IntentFilter(MusicService.SEEKBAR_RESULT));
     }//end
+
     /** OnPause  */
     //*******************************************************
     @Override
@@ -239,6 +245,7 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
     }//end
 
     
+
 
     /** ConnectToService  */
     //*******************************************************
@@ -415,7 +422,7 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id)
                         {
-                            ((MainActivity) getActivity()).songOnClick(position);
+                            ((MainActivity) getActivity()).songOnClick(position, false);
                         }
                     });//end-Listener
                     songsAdapter.notifyDataSetChanged();
@@ -464,14 +471,66 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
     //*******************************************************
     public static class AlbumFragment extends Fragment
     {
+        private Album album;
+        private AlbumTracksAdapter tracksAdapter;
+        private Context mContext;
+
         public AlbumFragment()
         {}
 
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_album, container, false);
-            return rootView;
+        public void onAttach(Context context)
+        {
+            super.onAttach(context);
+            mContext = context;
+
+            //Grab tracks that belong to this album
+            if (tracksAdapter == null)
+            {
+                album = ((MainActivity) getActivity()).getCurrentAlbum();
+                tracksAdapter = new AlbumTracksAdapter(getActivity(), ((MainActivity) getActivity()).getAlbumTracks());
+            }
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) 
+        {
+            View view = inflater.inflate(R.layout.fragment_album, container, false);
+
+            //Grab views
+            ImageView artView = (ImageView) view.findViewById(R.id.album_frag_art);
+            TextView nameView = (TextView) view.findViewById(R.id.album_frag_name);
+            TextView metadataView = (TextView) view.findViewById(R.id.album_frag_metadata);
+            ListView listView = (ListView) view.findViewById(R.id.album_fragment_list);
+
+
+            //Set art
+            Uri artUri = tracksAdapter.getItem(0).getAlbumArtUri();
+            Picasso.with(mContext)
+                   .load(artUri)
+                   .fit()
+                   .centerCrop()
+                   .into(artView);
+            
+            //Set metadata (Name, artist, numSongs)
+            nameView.setText(album.getTitle());
+            metadataView.setText(album.getArtist() + " | " + tracksAdapter.getCount() + " tracks");
+
+
+            //Populate tracksList
+            listView.setAdapter(tracksAdapter);
+            listView.setOnItemClickListener(new ListView.OnItemClickListener()//******
+            {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+                {
+                    ((MainActivity) getActivity()).songOnClick(position, true);
+                }
+            });//end-Listener
+            tracksAdapter.notifyDataSetChanged();
+            
+            return view;
+
         }
 
     }//end
@@ -574,6 +633,8 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
             int titleColumn = musicCursor.getColumnIndex(android.provider.MediaStore.Audio.Media.TITLE);
             int artistColumn = musicCursor.getColumnIndex(android.provider.MediaStore.Audio.Media.ARTIST);
             int albumIdColumn = musicCursor.getColumnIndex(android.provider.MediaStore.Audio.Media.ALBUM_ID);
+            int trackNumColumn = musicCursor.getColumnIndex(android.provider.MediaStore.Audio.Media.TRACK);
+            int durationColumn = musicCursor.getColumnIndex(android.provider.MediaStore.Audio.Media.DURATION);
 
             //add songs to list
             do {
@@ -581,11 +642,15 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
                 String thisTitle = musicCursor.getString(titleColumn);
                 String thisArtist = musicCursor.getString(artistColumn);
                 long thisAlbumId = musicCursor.getLong(albumIdColumn);
+                int thisTrackNum = musicCursor.getInt(trackNumColumn);
+                long thisDuration = musicCursor.getLong(durationColumn);
 
-                songsList.add(new Song(thisId, thisTitle, thisArtist, thisAlbumId));
+
+                songsList.add(new Song(thisId, thisTitle, thisArtist, thisAlbumId, thisTrackNum, thisDuration));
             } while (musicCursor.moveToNext());
         }
     }//end-populate
+
     /** PopulateAlbumsList */
     //*******************************************************
     public void populateAlbumsList()
@@ -594,11 +659,10 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
         final String _id = android.provider.MediaStore.Audio.Albums._ID;
         final String album_name = android.provider.MediaStore.Audio.Albums.ALBUM;
         final String artist = android.provider.MediaStore.Audio.Albums.ARTIST;
-        final String albumart = android.provider.MediaStore.Audio.Albums.ALBUM_ART;
 
-        final String[] columns = { _id, album_name, artist, albumart};
+        final String[] columns = { _id, album_name, artist};
         Cursor cursor = getContentResolver().query(uri, columns, null, null, null);
-
+        
         if(cursor!=null && cursor.moveToFirst())
         {
             do 
@@ -612,7 +676,10 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
             } while (cursor.moveToNext());
         }
         cursor.close();
+
+        currentAlbum = albumsList.get(0);
     }//end-populate
+
     /** SortList */
     //*******************************************************
     public <T extends TitleInterface> void sortList(ArrayList<T> list)
@@ -625,12 +692,14 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
             }
         });
     }//end
+
     /** GetSongsList */
     //*******************************************************
     public ArrayList<Song> getSongsList()
     {
         return songsList;
     }//end
+
     /** GetAlbumsList */
     //*******************************************************
     public ArrayList<Album> getAlbumsList()
@@ -638,36 +707,29 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
         return albumsList;
     }//end
 
-    //SetController 
-    //******************************************************
-    //public void setController()
-    //{
-        //if (controller == null)
-            //controller = new MusicController(this);
+    /** GetCurrentAlbum */
+    //*******************************************************
+    public Album getCurrentAlbum()
+    {
+        return currentAlbum;
+    }//end
 
-        //controller.setPrevNextListeners(new View.OnClickListener()
-            //{
-                //@Override
-                //public void onClick(View v)
-                //{
-                    //playNext();
-                //}
-            //}, new View.OnClickListener()
-            //{
-                //@Override
-                //public void onClick(View v)
-                //{
-                    //playPrev();
-                //}
+    /** GetAlbumTracks */
+    //*******************************************************
+    public ArrayList<Song> getAlbumTracks()
+    {
+        ArrayList<Song> tracksList = new ArrayList<Song>();
 
-            //});
-        //controller.setMediaPlayer(this);
-        //controller.setAnchorView(findViewById(R.id.container));
-        //controller.setEnabled(true);
+        for(Song s : songsList)
+        {
+            if (s.getAlbumId() == currentAlbum.getId())
+                tracksList.add(s);
+        }
 
-		//if(musicService!=null && bindFlag)
-            //musicService.setController(controller);
-    //}//end
+        return tracksList;
+    }//end
+
+
 
     /** GetPermission */
     //*******************************************************
@@ -688,7 +750,7 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
 
     /** SongOnClick */
     //*******************************************************
-    public void songOnClick(int position)
+    public void songOnClickHelper(int position)
     {
         musicService.setSong(position);
         updateViews();
@@ -701,12 +763,29 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
         rootLayout.setPanelState(PanelState.EXPANDED);
     }//end
 
+    /** SongOnClick */
+    //*******************************************************
+    public void songOnClick(int position, boolean flag)
+    {
+        //Determine if called from albumTracks
+        if (flag == true)
+            musicService.setAlbum(getAlbumTracks());
+
+        musicService.setAlbumFlag(flag);
+
+        //Call helper method
+        songOnClickHelper(position);
+
+    }//end
+
     /** AlbumOnClick */
     //*******************************************************
     public void albumOnClick(int position)
     {
-        //1. Replace frag with AlbumFragment
-        //
+        //Set Current Album
+        currentAlbum = albumsList.get(position);
+
+        //1. Replace frag_holder with AlbumFragment
         // Begin the transaction////*****
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         // Replace the contents of the container with the new fragment
@@ -714,8 +793,6 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
         // or ft.add(R.id.your_placeholder, new FooFragment());
         // Complete the changes added above
         ft.commit();//end
-
-        //2. Populate correct views
 
     }//end
 
@@ -738,6 +815,7 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
         musicService.playSong();
         //controller.show(0);
     }//end
+
     /** PlayPrev */
     //*******************************************************
     private void playPrev()
@@ -897,6 +975,7 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
         });//end-more
 
     }//end
+
     /** UpdateViews */
     //*******************************************************
     @Override
@@ -956,6 +1035,7 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
         }
     }//end-updater
 
+
     /** StartSeekbarUpdater */
     //*******************************************************
     private void startSeekbarUpdater()
@@ -974,6 +1054,7 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
         }
 
     }//end-updater
+
     /** StopSeekbarUpdater */
     //*******************************************************
     private void stopSeekbarUpdater() 
@@ -985,7 +1066,6 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
     }//end-updater
 
 
-
     /** Convert toSeconds */
     //*******************************************************
     private String toSeconds(int time)
@@ -994,6 +1074,7 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
         long sec = time - TimeUnit.MINUTES.toSeconds(min);
         return String.format("%02d", min) + ":" + String.format("%02d", sec);
     }//end-convert
+
     /** CalcBackgroundSize */
     //*******************************************************
     private static Point calcBackgroundSize(Display display)
@@ -1009,6 +1090,7 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
 
         return new Point(croppedWidth, croppedHeight);
     }//end-background
+
     /** TargetInterfaceMethods */
     //*******************************************************
     @Override
@@ -1027,4 +1109,5 @@ public class MainActivity extends AppCompatActivity implements ServiceCallback, 
         // just prepare mentally
     }
     //end-TargetMethods
+    
 }//end-class

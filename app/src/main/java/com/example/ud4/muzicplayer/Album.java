@@ -6,9 +6,9 @@ import android.content.ContentUris;
 
 public class Album implements TitleInterface
 {
-    private long mId;
-    private String mTitle;
-    private String mArtist;
+    public long mId;
+    public String mTitle;
+    public String mArtist;
 
     //Constructor
     public Album(long id, String title, String artist)

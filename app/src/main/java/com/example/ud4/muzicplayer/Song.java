@@ -10,38 +10,33 @@ public class Song implements TitleInterface
     private String mTitle;
     private String mArtist;
     private long mAlbumId;
+    private int mTrackNum;
+    private long mDuration;
 
     //Constructor
-    public Song(long id, String title, String artist, long albumId)
+    public Song(long id, String title, String artist, long albumId, int trackNum, long duration)
     {
         mId = id;
         mTitle = title;
         mArtist = artist;
         mAlbumId = albumId;
+        mTrackNum = trackNum;
+        mDuration = duration;
     }
     
     //Methods
-    public long getId()
-    {
-        return mId;
-    }
+    public long getId() { return mId; }
 
     @Override
-    public String getTitle()
-    {
+    public String getTitle() { return mTitle; }
 
-        return mTitle;
-    }
+    public String getArtist() { return mArtist; }
 
-    public String getArtist()
-    {
-        return mArtist;
-    }
+    public long getAlbumId() { return mAlbumId; }
 
-    public long getAlbumId()
-    {
-        return mAlbumId;
-    }
+    public int getTrackNum() { return mTrackNum; }
+
+    public long getDuration() { return mDuration; }
 
     public Uri getAlbumArtUri()
     {

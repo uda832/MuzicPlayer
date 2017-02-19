@@ -8,13 +8,47 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#59000000">
-    <TextView
+    <!--Art & Metadata -->
+    <RelativeLayout
+        android:id="@+id/album_frag_root"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        app:layout_heightPercent="40%"
+        android:layout_alignParentTop="true">
+        <ImageView
+            android:id="@+id/album_frag_art"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+        <TextView
+            android:id="@+id/album_frag_metadata"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:text="MetaData"
+            android:textSize="16sp"
+            android:textColor="#FFFFFF" />
+        <TextView
+            android:id="@+id/album_frag_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_alignParentLeft="true"
+            android:layout_above="@id/album_frag_metadata"
+            android:text="Album Name"
+            android:textSize="22sp"
+            android:textColor="#FFFFFF" />
+    </RelativeLayout>
+
+    <!--Songs ListView-->
+    <ListView
+        android:id="@+id/album_fragment_list"
+        android:layout_marginTop="20dp"
         android:layout_centerHorizontal="true"
-        android:text="Album Frag Success!"
-        android:textSize="18sp"
-        android:textColor="#FFFFFF" />
+        android:layout_below="@id/album_frag_root"
+        app:layout_widthPercent="90%" 
+        app:layout_heightPercent="60%" />
+
 
 
 </android.support.percent.PercentRelativeLayout>

@@ -7,7 +7,7 @@
 package com.example.ud4.muzicplayer;
 
 
-import java.util.Random;
+import java.util.Random;////*****
 import java.util.ArrayList;
 import android.app.Service;
 import android.app.Notification;
@@ -22,7 +22,7 @@ import android.os.Binder;
 import android.os.PowerManager;
 import android.os.IBinder;
 import android.util.Log;
-import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.content.LocalBroadcastManager;////end
 
 
 
@@ -32,6 +32,8 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     public static final String SEEKBAR_MAX = "com.example.ud4.muzicplayer.SEEKBAR_MAX";
     private MediaPlayer player;
     private ArrayList<Song> songs;
+    private ArrayList<Song> albumTracks;
+    private boolean albumFlag;
     private final IBinder musicBind = new MusicBinder();
 
     private int songPos;
@@ -48,6 +50,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     {
         super.onCreate();
         songPos = 0;
+        albumFlag = false;
         initPlayer();
 
         AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
@@ -108,8 +111,17 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
 
             //PlayNext
             songPos++;
-            if(songPos >= songs.size()) 
-                songPos=0;
+            if(albumFlag == true)
+            {
+                if(songPos >= albumTracks.size()) 
+                    songPos=0;
+            }
+            else 
+            {
+                if(songPos >= songs.size()) 
+                    songPos=0;
+
+            }
             playSong();
         }
 	}//end
@@ -213,6 +225,19 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         songPos = songIndex;
     }//end
 
+    /** SetAlbum  */
+    //*******************************************************
+    public void setAlbum(ArrayList<Song> tracksList)
+    {
+        albumTracks = tracksList;
+    }//end
+    /** SetAlbumFlag  */
+    //*******************************************************
+    public void setAlbumFlag(boolean flag)
+    {
+        albumFlag = flag;
+    }//end
+
     /** GetSongPos  */
     //*******************************************************
     public int getSongPos()
@@ -236,7 +261,14 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     {
         player.reset();
 
-        Song toPlay = songs.get(songPos);
+        Song toPlay;
+
+        //Determine if playing from Songs vs. Album
+        if (albumFlag == false)
+            toPlay = songs.get(songPos);
+        else
+            toPlay = albumTracks.get(songPos);
+
         songTitle = toPlay.getTitle();
 
         long toPlayId = toPlay.getId();

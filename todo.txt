@@ -90,23 +90,60 @@ Completed:
     + fragment_host.xml
         + Wrap viewpager + tablayout inside a Fragment
         + Replace viewpager with framelayout activity_main
+    +  Feat/frag update:
+        + Finish/fix-bugs related to HostFragment 
+    + Albums.OnItemClick behavior
+        + Replace ViewPager fragment with Album fragment 
 //end-completed
 
 
 NextCommit:
-    +  Feat/frag update:
-        + Finish/fix-bugs related to HostFragment 
-    
-    + Albums.OnItemClick behavior
-        + Replace ViewPager fragment with Album fragment 
-
+    + ViewPager text: change to white
+    + fragment_album.xml:
+        - Change background to album art
+        - 1/3 Screen with art, name, artist, year, numSongs
+        - Album Fragment:
+            - ListView Tracks (trackNum, TrackName, duration)
+    + Set up AlbumFragment class:
+        + AlbumFragment.onAttach:
+            + Modify Song class to hold song's trackNum and duration
+            + album_track.xml
+                + trackNum
+                + trackName
+                + trackDuration
+            + Traverse and grab songsList and grab songs with same album id
+            + AlbumTracksAdapter
+                + songOnClick mod:
+                    + Pass current album tracks to MusicService
+                    + Modify MusicService to handle cases when playing from album
+        + AlbumFragment.onCreateView:
+            + Grab views
+            + Populate views:
+                + TopArt
+                + Metadata
+                + listView
 
 
 CurrentTask:
 **********************************************************************
+        
+
+
+    CurrentTask:
+
+
+    Bugfix:
+        - fragment_album.ListView size is weird
+        - album_track: space out elements 
+        - change color of metadata
+        - title and metadata background should be darkened to show it more clearly
 
 
 
+
+
+    NextTask:
+        - Create sample for album fragment -- put placeholders in each field
 
 
 
@@ -114,31 +151,19 @@ CurrentTask:
 
 
 
-    - Set up Fragments:
-
-
-
-
-
-
-            - Album Fragment:
-                - 1/3 Screen with art, name, artist, year, total duration
-                - ListView Tracks (trackNum, TrackName, duration)
-
-
-            CurrentTask:
-                - 
-
 
    
 //end**********************************************************************
 
 NextTask:
-    - Mods:
-        - Empty albums and songs should have placeholder artwork
+    - Possible feature for AlbumFragment
+        - Reddit-like expandable/scrollable album art
+    - Implement upNext Queue
+        - Add drop down menu to song.xml (w/ "Add to Queue") 
 
     - Controller Bar Top line should show current seek time
-
+    - Mods:
+        - Empty albums and songs should have placeholder artwork
     - Set up Fragments:
         - Songs
             - LongClick for contextual action mode (CheckBox)

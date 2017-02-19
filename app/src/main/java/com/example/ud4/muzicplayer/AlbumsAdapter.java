@@ -1,6 +1,6 @@
 package com.example.ud4.muzicplayer;
 
-import java.util.ArrayList;
+import java.util.ArrayList;//{{{
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +10,7 @@ import android.widget.TextView;
 import android.widget.ImageView;
 import android.widget.ArrayAdapter;
 import android.net.Uri;
-import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Picasso;//}}}
 
 public class AlbumsAdapter extends ArrayAdapter<Album>
 {
